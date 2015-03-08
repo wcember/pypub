@@ -34,17 +34,19 @@ class ChapterFactory(object):
 
     def __init__(self, clean_function=clean.clean):
         self.clean_function = clean_function
+        user_agent = r'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0'
+        self.request_headers = {'User-Agent': user_agent}
 
     def create_chapter_from_url(self, url, title=None):
-        request_object = requests.get(url)
-        return self.create_chapter_from_string(request_object.text, title, url)
+        request_object = requests.get(url, headers=self.request_headers)
+        return self.create_chapter_from_string(request_object.text, url, title)
 
-    def create_chapter_from_file(self, file_name, title):
+    def create_chapter_from_file(self, file_name, url=None, title=None):
         with open(file_name, 'r') as f:
             content_string = f.read()
-        return Chapter(content_string, title)
+        return self.create_chapter_from_string(content_string, url, title)
 
-    def create_chapter_from_string(self, html_string, title=None, url=None):
+    def create_chapter_from_string(self, html_string, url=None, title=None):
         clean_html_string = self.clean_function(html_string)
         if title:
             pass
