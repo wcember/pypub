@@ -28,6 +28,14 @@ class Chapter(object):
             assert isinstance(title, basestring)
         except AssertionError:
             raise TypeError('title must be a string')
+        try:
+            assert title != ''
+        except AssertionError:
+            raise ValueError('title cannot be empty string')
+        try:
+            assert content != ''
+        except AssertionError:
+            raise ValueError('content cannot be empty string')
 
 
 class ChapterFactory(object):
