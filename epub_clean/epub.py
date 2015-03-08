@@ -65,7 +65,8 @@ class _EpubFile(object):
                 else:
                     assert len(value) == list_length
         checkListLengths(parameter_lists)
-        template_chapter = collections.namedtuple('template_chapter', parameter_lists.keys())
+        template_chapter = collections.namedtuple('template_chapter',
+                parameter_lists.keys())
         chapters = [template_chapter(*items) for items in zip(*parameter_lists.values())]
         self._renderTemplate(chapters=chapters, **self.non_chapter_parameters)
 
@@ -78,13 +79,15 @@ class _TOC_HTML(_EpubFile):
     def __init__(self,
             template_file=os.path.join(EPUB_TEMPLATES_DIR, 'toc.html'),
             **non_chapter_parameters):
-        super(_TOC_HTML, self).__init__(template_file, **non_chapter_parameters)
+        super(_TOC_HTML, self).__init__(template_file,
+                **non_chapter_parameters)
 
     def add_chapters(self, chapter_list):
         chapter_numbers = range(len(chapter_list))
         link_list = [str(n) + '.xhtml' for n in chapter_numbers]
         chapter_titles = [chapter.title for chapter in chapter_list]
-        super(_TOC_HTML, self).add_chapters(title=chapter_titles, link=link_list)
+        super(_TOC_HTML, self).add_chapters(title=chapter_titles,
+                link=link_list)
 
     def get_content_as_element(self):
         root = lxml.html.fromstring(self.content.encode('utf-8'))
@@ -117,7 +120,8 @@ class _Content_OPF(_EpubFile):
 
     def __init__(self, title, creator='', language='', rights='',
             publisher='', uid='', date = time.strftime("%m-%d-%Y")):
-        super(_Content_OPF, self).__init__(os.path.join(EPUB_TEMPLATES_DIR, 'opf.xml'),
+        super(_Content_OPF, self).__init__(os.path.join(EPUB_TEMPLATES_DIR,
+                'opf.xml'),
                 title=title,
                 creator=creator,
                 language=language,
