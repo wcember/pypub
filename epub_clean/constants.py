@@ -1,3 +1,5 @@
+import os
+
 SUPORTED_TAGS = {
         'a': ['href' ,'id', 'name'],
         'b': ['id'],
@@ -38,3 +40,5 @@ SUPORTED_TAGS = {
         'ul': ['class', 'id'],
         'var': []
         }
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+EPUB_TEMPLATES_DIR = os.path.join(BASE_DIR, 'epub_templates')
