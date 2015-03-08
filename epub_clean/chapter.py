@@ -1,4 +1,5 @@
 import cgi
+
 import lxml.html
 import requests
 
