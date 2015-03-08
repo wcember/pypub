@@ -5,7 +5,6 @@ import copy
 import imghdr
 import json
 import os
-import os.path
 import shutil
 import tempfile
 import time
