@@ -18,6 +18,7 @@ import chapter
 
 
 class _Minetype():
+
     def __init__(self, parent_directory):
         minetype_template = os.path.join(EPUB_TEMPLATES_DIR, 'minetype.txt')
         shutil.copy(minetype_template,
@@ -25,6 +26,7 @@ class _Minetype():
 
 
 class _ContainerFile():
+
     def __init__(self, parent_directory):
         container_template = os.path.join(EPUB_TEMPLATES_DIR, 'container.xml')
         shutil.copy(container_template,
@@ -32,15 +34,18 @@ class _ContainerFile():
 
 
 class _EpubFile(object):
+
     def __init__(self, template_file, **non_chapter_parameters):
         self.content = u''
         self.file_name = ''
         self.template_file = template_file
         self.non_chapter_parameters = non_chapter_parameters
+
     def write(self, file_name):
         self.file_name = file_name
         with open(file_name, 'wb') as f:
             f.write(self.content.encode('utf-8'))
+
     def _renderTemplate(self, **variable_value_pairs):
         def readTemplate():
             with open(self.template_file, 'r') as f:
@@ -49,6 +54,7 @@ class _EpubFile(object):
         template = readTemplate()
         rendered_template = template.render(variable_value_pairs)
         self.content = rendered_template
+
     def add_chapters(self, **parameter_lists):
         def checkListLengths(lists):
             list_length = None
@@ -62,28 +68,36 @@ class _EpubFile(object):
         template_chapter = collections.namedtuple('template_chapter', parameter_lists.keys())
         chapters = [template_chapter(*items) for items in zip(*parameter_lists.values())]
         self._renderTemplate(chapters=chapters, **self.non_chapter_parameters)
+
     def get_content(self):
         return self.content
 
+
 class _TOC_HTML(_EpubFile):
+
     def __init__(self,
             template_file=os.path.join(EPUB_TEMPLATES_DIR, 'toc.html'),
             **non_chapter_parameters):
         super(_TOC_HTML, self).__init__(template_file, **non_chapter_parameters)
+
     def add_chapters(self, chapter_list):
         chapter_numbers = range(len(chapter_list))
         link_list = [str(n) + '.xhtml' for n in chapter_numbers]
         chapter_titles = [chapter.title for chapter in chapter_list]
         super(_TOC_HTML, self).add_chapters(title=chapter_titles, link=link_list)
+
     def get_content_as_element(self):
         root = lxml.html.fromstring(self.content.encode('utf-8'))
         return root
 
+
 class _TOC_NCX(_EpubFile):
+
     def __init__(self,
             template_file=os.path.join(EPUB_TEMPLATES_DIR, 'toc_ncx.xml'),
             **non_chapter_parameters):
         super(_TOC_NCX, self).__init__(template_file, **non_chapter_parameters)
+
     def add_chapters(self, chapter_list):
         id_list = range(len(chapter_list))
         play_order_list = [n + 1 for n in id_list]
@@ -93,11 +107,14 @@ class _TOC_NCX(_EpubFile):
                 'play_order': play_order_list,
                 'title': title_list,
                 'link': link_list})
+
     def get_content_as_element(self):
         root = lxml.etree.fromstring(self.content.encode('utf-8'))
         return root
 
+
 class _Content_OPF(_EpubFile):
+
     def __init__(self, title, creator='', language='', rights='',
             publisher='', uid='', date = time.strftime("%m-%d-%Y")):
         super(_Content_OPF, self).__init__(os.path.join(EPUB_TEMPLATES_DIR, 'opf.xml'),
@@ -108,14 +125,17 @@ class _Content_OPF(_EpubFile):
                 publisher=publisher,
                 uid=uid,
                 date=date)
+
     def add_chapters(self, chapter_list):
         id_list = range(len(chapter_list))
         link_list = [str(n) + '.xhtml' for n in id_list]
         super(_Content_OPF, self).add_chapters(**{'id': id_list,
                 'link': link_list})
+
     def get_content_as_element(self):
         root = lxml.etree.fromstring(self.content.encode('utf-8'))
         return root
+
 
 class Epub():
 
@@ -206,6 +226,7 @@ class Epub():
         epub_path = turn_zip_into_epub(create_zip_archive(epub_name))
         shutil.rmtree(self.EPUB_DIR)
         return epub_path
+
 
 ##def create_epub_from_folder_file(epub_title, epub_file_title,
 ##        output_directory, input_directory, information_file):
