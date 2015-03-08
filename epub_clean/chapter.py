@@ -18,13 +18,13 @@ class Chapter(object):
 
     def write(self, file_name):
         with open(file_name, 'wb') as f:
-            f.write(self.content.encode('unicode'))
+            f.write(self.content.encode('utf-8'))
 
     def write_to_xhtml(self, file_name):
-        content_string = ''.join(u'<?xml verstion="1.0" encoding="UTF-8"?>',
-                self.content)
+        content_string = ''.join((u'<?xml verstion="1.0" encoding="UTF-8"?>',
+                self.content))
         with open(file_name, 'wb') as f:
-            f.write(content_string.encode('unicode'))
+            f.write(content_string.encode('utf-8'))
 
     def _validate_input_types(self, content, title):
         try:

@@ -83,12 +83,12 @@ class TestEpub(unittest.TestCase):
         checkSpine()
         checkManifest()
 
-    def test_createEpub(self):
+    def test_create_epub(self):
         e = epub.Epub(TEST_DIR, 'Test Epub')
         for index, c in enumerate(self.chapter_list):
             c.write(os.path.join(TEST_DIR, 'epub_output', str(index) + '.html'))
             e.add_chapter(c)
-        e.createEpub(epub_name = 'test_epub')
+        e.create_epub(epub_name = 'test_epub')
 
 ##class Test_Create_Epub_From_Folder(unittest.TestCase):
 ##    def test_create_epub_from_folder_file(self):

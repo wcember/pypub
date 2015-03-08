@@ -85,7 +85,14 @@ class _TOC_HTML(_EpubFile):
     def add_chapters(self, chapter_list):
         chapter_numbers = range(len(chapter_list))
         link_list = [str(n) + '.xhtml' for n in chapter_numbers]
-        chapter_titles = [chapter.title for chapter in chapter_list]
+        try:
+            for c in chapter_list:
+                t = type(c)
+                assert type(c) == chapter.Chapter
+        except AssertionError:
+            raise TypeError('chapter_list items must be Chapter not %s',
+                    str(t))
+        chapter_titles = [c.title for c in chapter_list]
         super(_TOC_HTML, self).add_chapters(title=chapter_titles,
                 link=link_list)
 
@@ -104,7 +111,7 @@ class _TOC_NCX(_EpubFile):
     def add_chapters(self, chapter_list):
         id_list = range(len(chapter_list))
         play_order_list = [n + 1 for n in id_list]
-        title_list = [chapter.title for chapter in chapter_list]
+        title_list = [c.title for c in chapter_list]
         link_list = [str(n) + '.xhtml' for n in id_list]
         super(_TOC_NCX, self).add_chapters(**{'id': id_list,
                 'play_order': play_order_list,
@@ -185,16 +192,16 @@ class Epub():
         self.current_chapter_path = ''.join([self.current_chapter_id,
                 '.xhtml'])
 
-    def add_chapter(self, chapter):
+    def add_chapter(self, c):
         try:
-            assert type(chapter) == chapter.Chapter
+            assert type(c) == chapter.Chapter
         except AssertionError:
             raise TypeError('chapter must be of type Chapter')
         chapter_file_output = os.path.join(self.OEBPS_DIR,
                 self.current_chapter_path)
-        chapter.write_to_xhtml(chapter_file_output)
+        c.write_to_xhtml(chapter_file_output)
         self._increase_current_chapter_number()
-        self.chapters.append(chapter)
+        self.chapters.append(c)
 
     def create_epub(self, epub_name = None):
         def createTOCs_and_ContentOPF():
