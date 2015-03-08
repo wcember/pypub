@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Table of Contents</title>
+  </head>
+  <body>
+    <h2>Table of Contents</h2>
+    <hr>
+    <div id="chapters">
+      {% for chapter in chapters %}
+      <p><a href= "{{ chapter.link }}">{{ chapter.title }}</a></p>
+      {% endfor %}
+    </div>
+  </body>
+</html>
