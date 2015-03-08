@@ -41,4 +41,5 @@ SUPORTED_TAGS = {
         'var': []
         }
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+TEST_DIR = os.path.join(BASE_DIR, 'test_files')
 EPUB_TEMPLATES_DIR = os.path.join(BASE_DIR, 'epub_templates')
