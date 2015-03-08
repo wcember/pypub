@@ -1,11 +1,10 @@
 import re
 
-import bs4
 import lxml.html
 
 import constants
 
-def clean(html_string, tags=constants.SUPORTED_TAGS ,pretty_print=False):
+def clean(html_string, tags=constants.SUPORTED_TAGS):
     try:
         assert isinstance(html_string, basestring)
     except AssertionError:
@@ -30,10 +29,7 @@ def clean(html_string, tags=constants.SUPORTED_TAGS ,pretty_print=False):
             pretty_print=True,
             doctype='<!DOCTYPE html>',
             encoding='unicode')
-    if pretty_print:
-        return bs4.BeautifulSoup(unformatted_html_string).prettify()
-    else:
-        return unformatted_html_string
+    return unformatted_html_string
 
 
 def condense(html_string):
