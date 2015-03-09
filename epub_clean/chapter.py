@@ -19,7 +19,7 @@ class Chapter(object):
     def write(self, file_name):
         try:
             assert file_name[-5] == '.html'
-        except AssertionError:
+        except (AssertionError, IndexError):
             raise ValueError('filename must end with .html')
         with open(file_name, 'wb') as f:
             f.write(self.content.encode('utf-8'))
@@ -27,7 +27,7 @@ class Chapter(object):
     def write_to_xhtml(self, file_name):
         try:
             assert file_name[-6] == '.xhtml'
-        except AssertionError:
+        except (AssertionError, IndexError):
             raise ValueError('filename must end with .xhtml')
         content_string = ''.join((u'<?xml verstion="1.0" encoding="UTF-8"?>',
                 self.content))

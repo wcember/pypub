@@ -49,6 +49,13 @@ class ChapterTests(unittest.TestCase):
         self.assertRaises(ValueError, chapter.Chapter, '', 'Dummy Content')
         self.assertRaises(ValueError, chapter.Chapter, 'Dummy Title', '')
 
+    def test_chapter_write_error(self):
+        test_file = os.path.join(test_directory, 'example.html')
+        c = self.factory.create_chapter_from_file(
+                test_file)
+        self.assertRaises(ValueError, c.write, '')
+        self.assertRaises(ValueError, c.write_to_xhtml, '')
+
 
 if __name__ == '__main__':
     unittest.main()
