@@ -18,7 +18,7 @@ class Chapter(object):
 
     def write(self, file_name):
         try:
-            assert file_name[-5] == '.html'
+            assert file_name[:-5] == '.html'
         except (AssertionError, IndexError):
             raise ValueError('filename must end with .html')
         with open(file_name, 'wb') as f:
