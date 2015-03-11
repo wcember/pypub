@@ -5,20 +5,12 @@ import lxml.html
 
 import constants
 
-def clean(input_string, output_type='HTML', tags=constants.SUPORTED_TAGS):
+def clean(input_string, tags=constants.SUPORTED_TAGS):
     try:
         assert isinstance(input_string, basestring)
     except AssertionError:
         raise TypeError
-    try:
-        assert output_type == 'HTML' or output_type == 'XHTML'
-    except AssertionError:
-        raise ValueError('output_type must be HTML or XHTML')
-    if output_type == 'HTML':
-        node = lxml.html.fromstring(input_string)
-    else:
-        parser = lxml.etree.XMLParser(encoding='utf-8', recover=True)
-        node = lxml.etree.fromstring(input_string, parser=parser)
+    node = lxml.html.fromstring(input_string)
     stack = node.getchildren()
     while stack:
         current_node = stack.pop()
@@ -34,20 +26,16 @@ def clean(input_string, output_type='HTML', tags=constants.SUPORTED_TAGS):
                 if attribute not in tags[current_node.tag]:
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
-    if output_type == 'HTML':
-        unformatted_html_string = lxml.html.tostring(node,
-                pretty_print=True,
-                doctype='<!DOCTYPE html>',
-                encoding='utf-8')
-        return unformatted_html_string
-    else:
-        unformatted_xhtml_string = lxml.etree.tostring(node,
-                pretty_print=True,
-                encoding='utf-8')
+    unformatted_html_string = lxml.html.tostring(node,
+            pretty_print=True,
+            doctype='<!DOCTYPE html>',
+            encoding='utf-8')
+    return unformatted_html_string
 
 
-def condense(html_string):
-    return unicode(re.sub('>\s+<','><',html_string).strip())
-
-def html_to_xml(html_string):
-    pass
+def condense(input_string):
+    try:
+        assert isinstance(input_string, basestring)
+    except AssertionError:
+        raise TypeError
+    return unicode(re.sub('>\s+<','><',input_string).strip())
