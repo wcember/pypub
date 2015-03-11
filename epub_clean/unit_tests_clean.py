@@ -69,6 +69,8 @@ class CleanTests(unittest.TestCase):
         self.assertEqual(condense(clean(s2)), condense(s))
         self.assertEqual(condense(clean(s3)), condense(s))
         self.assertEqual(condense(clean(s4)), condense(s))
+    def test_clean_tags_xhtml(self):
+        pass
 
 
 if __name__ == '__main__':
