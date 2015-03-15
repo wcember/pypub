@@ -18,21 +18,11 @@ class Chapter(object):
 
     def write(self, file_name):
         try:
-            assert file_name[-5:] == '.html'
-        except (AssertionError, IndexError):
-            raise ValueError('filename must end with .html')
-        with open(file_name, 'wb') as f:
-            f.write(self.content.encode('utf-8'))
-
-    def write_to_xhtml(self, file_name):
-        try:
             assert file_name[-6:] == '.xhtml'
         except (AssertionError, IndexError):
             raise ValueError('filename must end with .xhtml')
-        content_string = ''.join((u'<?xml version="1.0" encoding="UTF-8"?>',
-                self.content))
         with open(file_name, 'wb') as f:
-            f.write(content_string.encode('utf-8'))
+            f.write(self.content.encode('utf-8'))
 
     def _validate_input_types(self, content, title):
         try:
@@ -71,6 +61,7 @@ class ChapterFactory(object):
 
     def create_chapter_from_string(self, html_string, url=None, title=None):
         clean_html_string = self.clean_function(html_string)
+        clean_xhtml_string = clean.html_to_xhtml(clean_html_string)
         if title:
             pass
         else:
@@ -79,4 +70,4 @@ class ChapterFactory(object):
                 title = node.xpath('//title')[0].text
             except IndexError:
                 title = 'Ebook Chapter'
-        return Chapter(clean_html_string, title, url)
+        return Chapter(clean_xhtml_string, title, url)
