@@ -41,6 +41,7 @@ SUPORTED_TAGS = {
         'ul': ['class', 'id'],
         'var': []
         }
+xhtml_doctype_string = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_DIR = os.path.join(BASE_DIR, 'test_files')
 EPUB_TEMPLATES_DIR = os.path.join(BASE_DIR, 'epub_templates')

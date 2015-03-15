@@ -5,6 +5,8 @@ import unittest
 from clean import clean, condense, html_to_xhtml
 
 class CleanTests(unittest.TestCase):
+    def setUp(self):
+        self.maxDiff = None
     def test_condense(self):
         pass
     def test_clean_tags_full_html(self):
@@ -72,6 +74,18 @@ class CleanTests(unittest.TestCase):
 
     def test_html_to_xhtml(self):
         s = u'''
+                <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                 <head>
+                 </head>
+                 <body>
+                  <div id="Test">Hello</div>
+                  <br />
+                  <br />
+                 </body>
+                </html>
+                '''
+        s1 = u'''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -83,7 +97,8 @@ class CleanTests(unittest.TestCase):
                  </body>
                 </html>
                 '''
-        print html_to_xhtml(s)
+        self.assertEqual(condense(html_to_xhtml(clean((s1)))), condense(s))
+
 
 if __name__ == '__main__':
     unittest.main()
