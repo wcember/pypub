@@ -2,7 +2,7 @@ import re
 
 import unittest
 
-from clean import clean, condense
+from clean import clean, condense, html_to_xhtml
 
 class CleanTests(unittest.TestCase):
     def test_condense(self):
@@ -69,6 +69,21 @@ class CleanTests(unittest.TestCase):
         self.assertEqual(condense(clean(s2)), condense(s))
         self.assertEqual(condense(clean(s3)), condense(s))
         self.assertEqual(condense(clean(s4)), condense(s))
+
+    def test_html_to_xhtml(self):
+        s = u'''
+                <!DOCTYPE html>
+                <html>
+                 <head>
+                 </head>
+                 <body>
+                  <DIV ID="Test">Hello</div>
+                  <br>
+                  <br>
+                 </body>
+                </html>
+                '''
+        print html_to_xhtml(s)
 
 if __name__ == '__main__':
     unittest.main()

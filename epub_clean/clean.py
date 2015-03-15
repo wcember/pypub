@@ -39,3 +39,27 @@ def condense(input_string):
     except AssertionError:
         raise TypeError
     return unicode(re.sub('>\s+<','><',input_string).strip())
+
+def html_to_xhtml(html_string):
+    try:
+        assert isinstance(html_string, basestring)
+    except AssertionError:
+        raise TypeError
+    node = lxml.html.fromstring(html_string)
+    #Confirm root node is html
+    try:
+        assert node.tag.lower() == 'html'
+    except AssertionError:
+        raise ValueError(''.join('html_string cannot be a fragment.',
+                'Root node tag is %s', node.tag))
+    #Add xmlns attribute to html node
+    node.set('xmlns', 'http://www.w3.org/1999/xhtml')
+    #Set DOCTYPE
+    DOCTYPE_string = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+    '''
+    string_with_open_singletons = lxml.etree.tostring(node, pretty_print=True,
+            encoding="UTF-8", doctype=DOCTYPE_string)
+    #close singleton tags
+    xhtml_string = string_with_open_singletons.replace('<br/>', '<br />')
+    return string_with_open_singletons
