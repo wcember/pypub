@@ -54,7 +54,6 @@ class ChapterTests(unittest.TestCase):
         c = self.factory.create_chapter_from_file(
                 test_file)
         self.assertRaises(ValueError, c.write, '')
-        self.assertRaises(ValueError, c.write_to_xhtml, '')
 
 
 if __name__ == '__main__':
