@@ -25,6 +25,7 @@ SUPORTED_TAGS = {
         'hr /': ['color', 'id', 'width'],
         'html': [],
         'i': ['class', 'id'],
+        'img': ['align', 'border', 'height', 'id', 'src', 'width'],
         'img /': ['align', 'border', 'height', 'id', 'src', 'width'],
         'li': ['class', 'id', 'title'],
         'ol': ['id'],
