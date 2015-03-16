@@ -76,6 +76,10 @@ def html_to_xhtml(html_unicode_string):
     DOCTYPE_string = constants.xhtml_doctype_string
     string_with_open_singletons = lxml.etree.tostring(node, pretty_print=True,
             encoding='unicode', doctype=DOCTYPE_string)
+    xhtml_unicode_string = string_with_open_singletons
     #close singleton tag_dictionary
-    xhtml_unicode_string = string_with_open_singletons.replace('<br/>', '<br />')
+    for tag in constants.SINGLETON_TAG_LIST:
+        xhtml_unicode_string = xhtml_unicode_string.replace(
+                '<' + tag + '/>',
+                '<' + tag + ' />')
     return xhtml_unicode_string
