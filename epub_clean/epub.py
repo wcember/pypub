@@ -199,7 +199,7 @@ class Epub():
             raise TypeError('chapter must be of type Chapter')
         chapter_file_output = os.path.join(self.OEBPS_DIR,
                 self.current_chapter_path)
-        c.write_to_xhtml(chapter_file_output)
+        c.write(chapter_file_output)
         self._increase_current_chapter_number()
         self.chapters.append(c)
 
