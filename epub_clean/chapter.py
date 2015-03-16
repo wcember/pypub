@@ -1,4 +1,5 @@
 import cgi
+import codecs
 
 import lxml.html
 import requests
@@ -52,10 +53,11 @@ class ChapterFactory(object):
 
     def create_chapter_from_url(self, url, title=None):
         request_object = requests.get(url, headers=self.request_headers)
-        return self.create_chapter_from_string(request_object.text, url, title)
+        unicode_string = unicode(request_object.text, 'utf-8')
+        return self.create_chapter_from_string(unicode_string, url, title)
 
     def create_chapter_from_file(self, file_name, url=None, title=None):
-        with open(file_name, 'r') as f:
+        with codecs.open(file_name, 'r', encoding='utf-8') as f:
             content_string = f.read()
         return self.create_chapter_from_string(content_string, url, title)
 

@@ -5,12 +5,12 @@ import lxml.html
 
 import constants
 
-def clean(input_string, tags=constants.SUPORTED_TAGS):
+def clean(input_unicode_string, tags=constants.SUPORTED_TAGS):
     try:
-        assert isinstance(input_string, basestring)
+        assert type(input_unicode_string) == unicode
     except AssertionError:
         raise TypeError
-    node = lxml.html.fromstring(input_string)
+    node = lxml.html.fromstring(input_unicode_string)
     stack = node.getchildren()
     while stack:
         current_node = stack.pop()
@@ -26,38 +26,38 @@ def clean(input_string, tags=constants.SUPORTED_TAGS):
                 if attribute not in tags[current_node.tag]:
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
-    unformatted_html_string = lxml.html.tostring(node,
+    unformatted_html_unicode_string = lxml.html.tostring(node,
             pretty_print=True,
             doctype='<!DOCTYPE html>',
-            encoding='utf-8')
-    return unformatted_html_string
+            encoding='unicode')
+    return unformatted_html_unicode_string
 
 
-def condense(input_string):
+def condense(input_unicode_string):
     try:
-        assert isinstance(input_string, basestring)
+        assert type(input_unicode_string) == unicode
     except AssertionError:
         raise TypeError
-    return unicode(re.sub('>\s+<','><',input_string).strip())
+    return re.sub('>\s+<','><',input_unicode_string).strip()
 
-def html_to_xhtml(html_string):
+def html_to_xhtml(html_unicode_string):
     try:
-        assert isinstance(html_string, basestring)
+        assert type(html_unicode_string) == unicode
     except AssertionError:
         raise TypeError
-    node = lxml.html.fromstring(html_string)
+    node = lxml.html.fromstring(html_unicode_string)
     #Confirm root node is html
     try:
         assert node.tag.lower() == 'html'
     except AssertionError:
-        raise ValueError(''.join('html_string cannot be a fragment.',
+        raise ValueError(''.join('html_unicode_string cannot be a fragment.',
                 'Root node tag is %s', node.tag))
     #Add xmlns attribute to html node
     node.set('xmlns', 'http://www.w3.org/1999/xhtml')
     #Set DOCTYPE
     DOCTYPE_string = constants.xhtml_doctype_string
     string_with_open_singletons = lxml.etree.tostring(node, pretty_print=True,
-            encoding="UTF-8", doctype=DOCTYPE_string)
+            encoding='unicode', doctype=DOCTYPE_string)
     #close singleton tags
-    xhtml_string = string_with_open_singletons.replace('<br/>', '<br />')
-    return xhtml_string
+    xhtml_unicode_string = string_with_open_singletons.replace('<br/>', '<br />')
+    return xhtml_unicode_string
