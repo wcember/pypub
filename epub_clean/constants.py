@@ -1,6 +1,6 @@
 import os
 
-SUPORTED_TAGS = {
+SUPPORTED_TAGS = {
         'a': ['href' ,'id', 'name'],
         'b': ['id'],
         'big': [],
