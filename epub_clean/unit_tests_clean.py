@@ -2,7 +2,7 @@ import re
 
 import unittest
 
-from clean import clean, condense, html_to_xhtml
+from clean import clean, condense, html_to_xhtml, validate
 
 class CleanTests(unittest.TestCase):
     def setUp(self):

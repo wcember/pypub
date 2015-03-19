@@ -224,6 +224,7 @@ class Epub():
             except OSError:
                 pass
             shutil.make_archive(epub_name_with_path, 'zip', self.EPUB_DIR)
+            print epub_name_with_path
             return epub_name_with_path + '.zip'
         def turn_zip_into_epub(zip_archive):
             epub_full_name = zip_archive.strip('.zip') + '.epub'
