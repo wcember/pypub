@@ -2,7 +2,7 @@ import re
 
 import unittest
 
-from clean import clean, condense, html_to_xhtml, validate
+from clean import clean, condense, html_to_xhtml, get_content
 
 class CleanTests(unittest.TestCase):
     def setUp(self):
@@ -98,6 +98,23 @@ class CleanTests(unittest.TestCase):
                 </html>
                 '''
         self.assertEqual(condense(html_to_xhtml(clean((s1)))), condense(s))
+
+    def test_get_content(self):
+        s = u'''
+                <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                 <head>
+                 </head>
+                 <body>
+                  <div id="Test">Hello</div>
+                  <br />
+                  <br />
+                 </body>
+                </html>
+                '''
+        self.assertEqual(get_content(s), [
+                (u'div', u'Hello'),
+        ])
 
 
 if __name__ == '__main__':
