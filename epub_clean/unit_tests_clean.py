@@ -112,7 +112,7 @@ class CleanTests(unittest.TestCase):
                  </body>
                 </html>
                 '''
-        self.assertEqual(get_content(s), [
+        self.assertEqual(get_content(s, u''), [
                 (u'div', u'Hello'),
         ])
 
