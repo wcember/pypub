@@ -58,15 +58,11 @@ def get_content(input_unicode_string):
         raise TypeError
     node = lxml.html.fromstring(input_unicode_string)
     content_list = []
-    for element in node.iter():
-        if element.tail is not None:
-            stripped_tail = element.tail.strip()
-            if stripped_tail:
-                content_list.append((u'p', stripped_tail))
-        if element.text is not None:
-            stripped_text = element.text.strip()
-            if stripped_text:
-                content_list.append((element.tag, stripped_text))
+    for element in root.iter():
+        if root.tail:
+            content_list.append(root.tail)
+        if root.text:
+            content_list.append(root.text)
     return content_list
 
 
