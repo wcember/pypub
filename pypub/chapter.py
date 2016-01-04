@@ -1,7 +1,7 @@
 import cgi
 import codecs
 
-import lxml.html
+from bs4 import BeautifulSoup
 import requests
 
 import clean
@@ -68,8 +68,9 @@ class ChapterFactory(object):
             pass
         else:
             try:
-                node = lxml.html.fromstring(html_string)
-                title = node.xpath('//title')[0].text
+                root = BeautifulSoup(html_string, 'html.parser')
+                title_node = root.title
+                title = unicode(title_node.string)
             except IndexError:
                 title = 'Ebook Chapter'
         return Chapter(clean_xhtml_string, title, url)
