@@ -49,19 +49,19 @@ def clean(input_unicode_string,
     return unformatted_html_unicode_string
 
 
-def get_content(input_unicode_string):
-    try:
-        assert type(input_unicode_string) == unicode
-    except AssertionError:
-        raise TypeError
-    node = lxml.html.fromstring(input_unicode_string)
-    content_list = []
-    for element in root.iter():
-        if root.tail:
-            content_list.append(root.tail)
-        if root.text:
-            content_list.append(root.text)
-    return content_list
+##def get_content(input_unicode_string):
+##    try:
+##        assert type(input_unicode_string) == unicode
+##    except AssertionError:
+##        raise TypeError
+##    node = lxml.html.fromstring(input_unicode_string)
+##    content_list = []
+##    for element in root.iter():
+##        if root.tail:
+##            content_list.append(root.tail)
+##        if root.text:
+##            content_list.append(root.text)
+##    return content_list
 
 
 def condense(input_unicode_string):
