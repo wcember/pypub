@@ -31,33 +31,20 @@ def clean(input_unicode_string,
         raise TypeError
     root = BeautifulSoup(input_unicode_string, 'html.parser')
     stack = root.findAll(True, recursive=False)
-##    node = lxml.html.fromstring(input_unicode_string)
-##    stack = node.getchildren()
     while stack:
         current_node = stack.pop()
-##        child_node_list = current_node.getchildren()
         child_node_list = current_node.findAll(True, recursive=False)
-##        if not current_node.tag in tag_dictionary.keys():
         if not current_node.name in tag_dictionary.keys():
-##            parent_node = current_node.getparent()
             parent_node = current_node.parent
-##            parent_node.remove(current_node)
             current_node.extract()
             for n in child_node_list:
-##                parent_node.insert(-1, n)
                 parent_node.append(n)
         else:
-##            attribute_dict = current_node.attrib
             attribute_dict = current_node.attrs
             for attribute in attribute_dict.keys():
-##                if attribute not in tag_dictionary[current_node.tag]:
                 if attribute not in tag_dictionary[current_node.name]:
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
-##    unformatted_html_unicode_string = lxml.html.tostring(node,
-##            pretty_print=True,
-##            doctype='<!DOCTYPE html>',
-##            encoding='unicode')
     unformatted_html_unicode_string = unicode(root)
     return unformatted_html_unicode_string
 
