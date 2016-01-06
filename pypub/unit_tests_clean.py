@@ -2,7 +2,7 @@ import re
 
 import unittest
 
-from clean import clean, condense, html_to_xhtml, validate
+from clean import clean, condense, html_to_xhtml
 
 class CleanTests(unittest.TestCase):
     def setUp(self):
@@ -74,7 +74,7 @@ class CleanTests(unittest.TestCase):
 
     def test_html_to_xhtml(self):
         s = u'''
-                <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+                <!DOCTYPE html>
                 <html xmlns="http://www.w3.org/1999/xhtml">
                  <head>
                  </head>

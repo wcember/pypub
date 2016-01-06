@@ -46,6 +46,8 @@ def clean(input_unicode_string,
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
     unformatted_html_unicode_string = unicode(root)
+    #fix <br> tags since not handled well by default by bs4
+    unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
     return unformatted_html_unicode_string
 
 
@@ -76,27 +78,22 @@ def html_to_xhtml(html_unicode_string):
         assert type(html_unicode_string) == unicode
     except AssertionError:
         raise TypeError
-    node = lxml.html.fromstring(html_unicode_string)
+    root = BeautifulSoup(html_unicode_string, 'html.parser')
     #Confirm root node is html
     try:
-        assert node.tag.lower() == 'html'
+        assert root.html is not None
     except AssertionError:
-        raise ValueError(''.join('html_unicode_string cannot be a fragment.',
-                'Root node tag is %s', node.tag))
+        raise ValueError(''.join(['html_unicode_string cannot be a fragment.',
+                'Root node tag is %s', root.name]))
     #Add xmlns attribute to html node
-    node.set('xmlns', 'http://www.w3.org/1999/xhtml')
-    #Set DOCTYPE
-    DOCTYPE_string = constants.xhtml_doctype_string
-    string_with_open_singletons = lxml.etree.tostring(node, pretty_print=True,
-            encoding='unicode', doctype=DOCTYPE_string)
-    xhtml_unicode_string = string_with_open_singletons
+    root.html['xmlns'] = 'http://www.w3.org/1999/xhtml'
     #close singleton tag_dictionary
     for tag in constants.SINGLETON_TAG_LIST:
-        xhtml_unicode_string = xhtml_unicode_string.replace(
+        root = unicode(root).replace(
                 '<' + tag + '/>',
                 '<' + tag + ' />')
-    return xhtml_unicode_string
+    return root
 
-def validate(xhtml_unicode_string):
-    parser = lxml.etree.XMLParser(dtd_validation=True)
-    return lxml.etree.fromstring(xhtml_unicode_string, parser)
+##def validate(xhtml_unicode_string):
+##    parser = lxml.etree.XMLParser(dtd_validation=True)
+##    return lxml.etree.fromstring(xhtml_unicode_string, parser)
