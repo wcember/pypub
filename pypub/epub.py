@@ -14,11 +14,11 @@ import requests
 
 try:
     imp.find_module('lxml')
-    lxml_module_exists = true
+    lxml_module_exists = True
     import lxml.html
     import lxml.html.builder
 except ImportError:
-    lxml_module_exists = false
+    lxml_module_exists = False
 
 from constants import *
 import chapter
@@ -129,8 +129,11 @@ class _TOC_NCX(_EpubFile):
                 'link': link_list})
 
     def get_content_as_element(self):
-        root = lxml.etree.fromstring(self.content.encode('utf-8'))
-        return root
+        if lxml_module_exists:
+            root = lxml.etree.fromstring(self.content.encode('utf-8'))
+            return root
+        else:
+            raise NotImplementedError()
 
 
 class _Content_OPF(_EpubFile):
@@ -154,8 +157,11 @@ class _Content_OPF(_EpubFile):
                 'link': link_list})
 
     def get_content_as_element(self):
-        root = lxml.etree.fromstring(self.content.encode('utf-8'))
-        return root
+        if lxml_module_exists:
+            root = lxml.etree.fromstring(self.content.encode('utf-8'))
+            return root
+        else:
+            raise NotImplementedError()
 
 
 class Epub():

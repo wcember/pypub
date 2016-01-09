@@ -6,8 +6,6 @@ import shutil
 import tempfile
 import time
 
-import lxml.html
-
 import chapter
 from constants import *
 import epub
@@ -44,9 +42,12 @@ class TestEpub(unittest.TestCase):
             self.assertEqual(chapter_nodes[1][0].text,self.chapter_titles[1])
             self.assertEqual(chapter_nodes[2][0].text,self.chapter_titles[2])
             self.assertEqual(chapter_nodes[3][0].text,self.chapter_titles[3])
-        create_TOC()
-        check_titles()
-        self.test_toc.write(os.path.join(TEST_DIR, 'epub_output', 'toc.html'))
+        if epub.lxml_module_exists:
+            create_TOC()
+            check_titles()
+            self.test_toc.write(os.path.join(TEST_DIR, 'epub_output', 'toc.html'))
+        else:
+            self.assertRaises(NotImplementedError, create_TOC)
 
     def test_TOCNCX(self):
         def createTOC():
@@ -58,9 +59,12 @@ class TestEpub(unittest.TestCase):
             self.assertEqual(len(chapter_nodes),len(self.chapter_list))
             for index, node in enumerate(chapter_nodes):
                 self.assertEqual(node[0][0].text,self.chapter_titles[index])
-        createTOC()
-        checkTitles()
-        self.test_toc.write(os.path.join(TEST_DIR, 'epub_output', 'toc_ncx.xml'))
+        if epub.lxml_module_exists:
+            createTOC()
+            checkTitles()
+            self.test_toc.write(os.path.join(TEST_DIR, 'epub_output', 'toc_ncx.xml'))
+        else:
+            self.assertRaises(NotImplementedError, createTOC)
 
     def test_ContentOPF(self):
         def createContentOPF():
@@ -78,10 +82,13 @@ class TestEpub(unittest.TestCase):
         def checkManifest():
             manifest_nodes = self.opf_element[1].getchildren()
             self.assertEqual(len(manifest_nodes),len(self.chapter_list) + 2)
-        createContentOPF()
-        check_encoding()
-        checkSpine()
-        checkManifest()
+        if epub.lxml_module_exists:
+            createContentOPF()
+            check_encoding()
+            checkSpine()
+            checkManifest()
+        else:
+            self.assertRaises(NotImplementedError, createContentOPF)
 
     def test_create_epub(self):
         e = epub.Epub(os.path.join(TEST_DIR, 'epub_output'), 'Test Epub')
