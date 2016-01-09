@@ -1,6 +1,7 @@
 import collections
 import copy
 import json
+import imp
 import os
 import random
 import string
@@ -9,9 +10,15 @@ import tempfile
 import time
 
 import jinja2
-import lxml.html
-import lxml.html.builder
 import requests
+
+try:
+    imp.find_module('lxml')
+    lxml_module_exists = true
+    import lxml.html
+    import lxml.html.builder
+except ImportError:
+    lxml_module_exists = false
 
 from constants import *
 import chapter
@@ -97,8 +104,11 @@ class _TOC_HTML(_EpubFile):
                 link=link_list)
 
     def get_content_as_element(self):
-        root = lxml.html.fromstring(self.content.encode('utf-8'))
-        return root
+        if lxml_module_exists:
+            root = lxml.html.fromstring(self.content.encode('utf-8'))
+            return root
+        else:
+            raise NotImplementedError()
 
 
 class _TOC_NCX(_EpubFile):
