@@ -238,24 +238,3 @@ class Epub():
         epub_path = turn_zip_into_epub(create_zip_archive(epub_name))
         shutil.rmtree(self.EPUB_DIR)
         return epub_path
-
-
-##def create_epub_from_folder_file(epub_title, epub_file_title,
-##        output_directory, input_directory, information_file):
-##    if information_file is not None:
-##        with open(information_file, 'rb') as f:
-##            information_list = json.load(f)
-##    else:
-##        information_list = None
-##    e = Epub(output_directory, epub_title)
-##    chapter_list = []
-##    for information_dictionary in information_list:
-##        chapter_path = information_dictionary['path']
-##        chapter_url = information_dictionary['url']
-##        chapter_title = information_dictionary['title']
-##        chapter_list.append(chapter.Chapter(chapter_path, chapter_url, chapter_title))
-##    for c in chapter_list:
-##        c.clean_and_replace_images(e)
-##        e.add_chapter(c)
-##    e.create_epub(epub_file_title)
-##    return e

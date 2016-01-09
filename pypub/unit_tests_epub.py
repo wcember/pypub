@@ -92,19 +92,6 @@ class TestEpub(unittest.TestCase):
             e.add_chapter(c)
         e.create_epub(epub_name = 'test_epub')
 
-##class Test_Create_Epub_From_Folder(unittest.TestCase):
-##    def test_create_epub_from_folder_file(self):
-##        test_folder = os.path.join(TEST_DIR, 'test_create_epub_from_folder')
-##        information_file = os.path.join(test_folder, 'link_information.json')
-##        e = epub.create_epub_from_folder_file('Sample Title', 'Test',
-##                test_folder, test_folder, information_file)
-##        self.assertEqual(len(e.chapters),3)
-##        chapter_1 = e.chapters[0]
-##        self.assertEqual(chapter_1.title,'Example Domain')
-##        chapter_2 = e.chapters[1]
-##        self.assertEqual(chapter_2.title,'AVC')
-##        chapter_2 = e.chapters[2]
-##        self.assertEqual(chapter_2.title,'Wikipedia')
 
 if __name__ == '__main__':
     unittest.main()
