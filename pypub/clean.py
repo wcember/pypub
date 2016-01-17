@@ -10,7 +10,6 @@ import constants
 
 def unicode_to_html_entities(text):
     '''Converts unicode to HTML entities.  For example '&' becomes '&amp;'''
-##    text = cgi.escape(text).encode('ascii', 'xmlcharrefreplace')
     text = EntitySubstitution.substitute_html(text)
     return text
 
@@ -58,22 +57,6 @@ def clean(input_unicode_string,
     unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
     return unformatted_html_unicode_string
 
-
-##def get_content(input_unicode_string):
-##    try:
-##        assert type(input_unicode_string) == unicode
-##    except AssertionError:
-##        raise TypeError
-##    node = lxml.html.fromstring(input_unicode_string)
-##    content_list = []
-##    for element in root.iter():
-##        if root.tail:
-##            content_list.append(root.tail)
-##        if root.text:
-##            content_list.append(root.text)
-##    return content_list
-
-
 def condense(input_unicode_string):
     try:
         assert type(input_unicode_string) == unicode
@@ -104,7 +87,3 @@ def html_to_xhtml(html_unicode_string):
                 '<' + tag + '/>',
                 '<' + tag + ' />')
     return unicode_string
-
-##def validate(xhtml_unicode_string):
-##    parser = lxml.etree.XMLParser(dtd_validation=True)
-##    return lxml.etree.fromstring(xhtml_unicode_string, parser)
