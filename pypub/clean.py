@@ -79,7 +79,9 @@ def condense(input_unicode_string):
         assert type(input_unicode_string) == unicode
     except AssertionError:
         raise TypeError
-    return re.sub('>\s+<','><',input_unicode_string).strip()
+    removed_leading_whitespace = re.sub('>\s+','>', input_unicode_string).strip()
+    removed_trailing_whitespace = re.sub('\s+<','<', removed_leading_whitespace).strip()  #Need to fix this so replaces whitespace with words between tags
+    return removed_trailing_whitespace
 
 def html_to_xhtml(html_unicode_string):
     try:
