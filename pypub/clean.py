@@ -1,10 +1,18 @@
+import cgi
 import re
 
 from bs4 import BeautifulSoup
+from bs4.dammit import EntitySubstitution
 import lxml.etree
 import lxml.html
 
 import constants
+
+def unicode_to_html_entities(text):
+    '''Converts unicode to HTML entities.  For example '&' becomes '&amp;'''
+##    text = cgi.escape(text).encode('ascii', 'xmlcharrefreplace')
+    text = EntitySubstitution.substitute_html(text)
+    return text
 
 def clean(input_unicode_string,
         tag_dictionary=constants.SUPPORTED_TAGS):
@@ -45,7 +53,7 @@ def clean(input_unicode_string,
                 if attribute not in tag_dictionary[current_node.name]:
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
-    unformatted_html_unicode_string = unicode(root)
+    unformatted_html_unicode_string = unicode(root.prettify(encoding='utf-8', formatter=EntitySubstitution.substitute_html), encoding = 'utf-8')
     #fix <br> tags since not handled well by default by bs4
     unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
     return unformatted_html_unicode_string
@@ -75,7 +83,7 @@ def condense(input_unicode_string):
 
 def html_to_xhtml(html_unicode_string):
     try:
-        assert type(html_unicode_string) == unicode
+        assert isinstance(html_unicode_string, basestring)
     except AssertionError:
         raise TypeError
     root = BeautifulSoup(html_unicode_string, 'html.parser')
@@ -84,15 +92,16 @@ def html_to_xhtml(html_unicode_string):
         assert root.html is not None
     except AssertionError:
         raise ValueError(''.join(['html_unicode_string cannot be a fragment.',
-                'Root node tag is %s', root.name]))
+                'string is the following: %s', unicode(root)]))
     #Add xmlns attribute to html node
     root.html['xmlns'] = 'http://www.w3.org/1999/xhtml'
+    unicode_string = unicode(root.prettify(encoding='utf-8', formatter='html'), encoding = 'utf-8')
     #close singleton tag_dictionary
     for tag in constants.SINGLETON_TAG_LIST:
-        root = unicode(root).replace(
+        unicode_string = unicode_string.replace(
                 '<' + tag + '/>',
                 '<' + tag + ' />')
-    return root
+    return unicode_string
 
 ##def validate(xhtml_unicode_string):
 ##    parser = lxml.etree.XMLParser(dtd_validation=True)
