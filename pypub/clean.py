@@ -6,7 +6,7 @@ from bs4.dammit import EntitySubstitution
 
 import constants
 
-def clean(input_unicode_string,
+def clean(input_string,
         tag_dictionary=constants.SUPPORTED_TAGS):
     '''Sanitizes HTML.
 
@@ -15,21 +15,22 @@ def clean(input_unicode_string,
     Attributes not contained as arguments in tag_dictionary are removed.
 
     Args:
-        input_unicode_string: A unicode string representing HTML.
+        input_string: A (possibly unicode) string representing HTML.
         tag_dictionary: A dictionary with tags as keys and attributes as
             values.
 
     Returns:
-        A unicode string representing HTML. Doctype is set to <!DOCTYPE html>.
+        A (possibly unicode) string representing HTML.
+        Doctype is set to <!DOCTYPE html>.
 
     Raises:
-        TypeError: Raised if input_unicode_string isn't of type unicode.
+        TypeError: Raised if input_string isn't a unicode string or string.
     '''
     try:
-        assert type(input_unicode_string) == unicode
+        assert isinstance(input_string, basestring)
     except AssertionError:
         raise TypeError
-    root = BeautifulSoup(input_unicode_string, 'html.parser')
+    root = BeautifulSoup(input_string, 'html.parser')
     stack = root.findAll(True, recursive=False)
     while stack:
         current_node = stack.pop()
@@ -50,16 +51,38 @@ def clean(input_unicode_string,
     unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
     return unformatted_html_unicode_string
 
-def condense(input_unicode_string):
+def condense(input_string):
+    '''Trims leadings and trailing whitespace between tags in an html document
+
+    Args:
+        input_string: A (possible unicode) string representing HTML.
+
+    Returns:
+        A (possibly unicode) string representing HTML.
+
+    Raises:
+        TypeError: Raised if input_string isn't a unicode string or string.
+    '''
     try:
-        assert type(input_unicode_string) == unicode
+        assert isinstance(input_string, basestring)
     except AssertionError:
         raise TypeError
-    removed_leading_whitespace = re.sub('>\s+','>', input_unicode_string).strip()
+    removed_leading_whitespace = re.sub('>\s+','>', input_string).strip()
     removed_trailing_whitespace = re.sub('\s+<','<', removed_leading_whitespace).strip()  #Need to fix this so replaces whitespace with words between tags
     return removed_trailing_whitespace
 
 def html_to_xhtml(html_unicode_string):
+    '''Converts html to xhtml
+
+    Args:
+        input_string: A (possible unicode) string representing HTML.
+
+    Returns:
+        A (possibly unicode) string representing XHTML.
+
+    Raises:
+        TypeError: Raised if input_string isn't a unicode string or string.
+    '''
     try:
         assert isinstance(html_unicode_string, basestring)
     except AssertionError:

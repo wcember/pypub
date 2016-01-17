@@ -7,7 +7,7 @@
     <dc:rights></dc:rights>
     <dc:publisher></dc:publisher>
     <dc:identifier opf:scheme="UUID"></dc:identifier>
-    <dc:date>01-16-2016</dc:date>
+    <dc:date>01-17-2016</dc:date>
   </metadata>
   <manifest>
     <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
