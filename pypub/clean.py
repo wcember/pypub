@@ -6,11 +6,6 @@ from bs4.dammit import EntitySubstitution
 
 import constants
 
-def unicode_to_html_entities(text):
-    '''Converts unicode to HTML entities.  For example '&' becomes '&amp;'''
-    text = EntitySubstitution.substitute_html(text)
-    return text
-
 def clean(input_unicode_string,
         tag_dictionary=constants.SUPPORTED_TAGS):
     '''Sanitizes HTML.
