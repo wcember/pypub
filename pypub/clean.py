@@ -3,8 +3,6 @@ import re
 
 from bs4 import BeautifulSoup
 from bs4.dammit import EntitySubstitution
-import lxml.etree
-import lxml.html
 
 import constants
 
