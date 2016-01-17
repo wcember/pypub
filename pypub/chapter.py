@@ -9,6 +9,22 @@ import constants
 
 
 class Chapter(object):
+    '''Class representing an epub chapter. By and large this shouldn't be
+    called directly but rather one should use the class ChapterFactor to
+    instantiate a chapter.
+
+    Args:
+        content (str): The content of the chapter.
+        Should be formatted as xhtml.
+        title (str): The title of the chapter.
+        url (Option[str]): The url of the webpage where the chapter is from
+        if applicable. By default this is None.
+
+    Attributes: Same as arguments with additionally the following
+        html_title (str): Title string with special characters replaced with
+            html-safe sequences
+    '''
+
 
     def __init__(self, content, title, url=None):
         self._validate_input_types(content, title)
