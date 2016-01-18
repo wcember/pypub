@@ -16,10 +16,11 @@ def clean(input_string,
 
     Args:
         input_string (str): A (possibly unicode) string representing HTML.
-        tag_dictionary (Option[dict]): A dictionary with tags as keys and attributes as
-            values. By default, this is set to use the supported tags and
-            attributes for the Amazon Kindle, as found at
-            https://kdp.amazon.com/help?topicId=A1JPUWCSD6F59O
+        tag_dictionary (Option[dict]): A dictionary with tags as keys and
+            attributes as values. This operates as a whitelist--i.e. if a tag
+            isn't contained, it will be removed. By default, this is set to
+            use the supported tags and attributes for the Amazon Kindle,
+            as found at https://kdp.amazon.com/help?topicId=A1JPUWCSD6F59O
 
     Returns:
         str: A (possibly unicode) string representing HTML.

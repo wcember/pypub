@@ -38,6 +38,7 @@ class Chapter(object):
         self.html_title = cgi.escape(self.title, quote=True)
 
     def write(self, file_name):
+        '''Writes the chapter object to an xhtml file'''
         try:
             assert file_name[-6:] == '.xhtml'
         except (AssertionError, IndexError):
@@ -65,6 +66,14 @@ class Chapter(object):
 
 
 class ChapterFactory(object):
+    '''Used to create Chapter objects.Chapter objects can be created from urls,
+        files, and strings.
+
+    Args:
+        clean_function (Option[function]): A function used to sanitize raw
+            html to be used in an epub. By default, this is the pypub.clean
+            function.
+    '''
 
     def __init__(self, clean_function=clean.clean):
         self.clean_function = clean_function
@@ -72,6 +81,22 @@ class ChapterFactory(object):
         self.request_headers = {'User-Agent': user_agent}
 
     def create_chapter_from_url(self, url, title=None):
+        '''Creates a Chapter function from a url. Pulls the webpage from the
+            given url, sanitizes if using the clean_function method, and saves
+            it as the content of the created chapter.Basic webpage loaded
+            before any javascript executed.
+
+        Args:
+            url (string): The url to pull the content of the created Chapter
+                from
+            title (Option[string]): The title of the created Chapter. By
+                default, this is None, in which case the title will try to be
+                inferred from the webpage at the url.
+
+        Returns:
+            Chapter: A chapter object whose content is the webpage at the given
+                url and whose title is that provided or inferred from the url
+        '''
         request_object = requests.get(url, headers=self.request_headers)
         unicode_string = unicode(request_object.text, 'utf-8')
         return self.create_chapter_from_string(unicode_string, url, title)
