@@ -4,7 +4,7 @@ Developer Interface
 Functions
 =========================
 
-.. autofunction:: pypub.clean
+.. autofunction:: clean
 
 Classes
 =========================

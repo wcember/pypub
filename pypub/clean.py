@@ -21,7 +21,7 @@ def clean(input_string,
             values.
 
     Returns:
-        A (possibly unicode) string representing HTML.
+        str: A (possibly unicode) string representing HTML.
 
 
     Raises:
