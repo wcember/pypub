@@ -8,29 +8,24 @@ import constants
 
 def clean(input_string,
         tag_dictionary=constants.SUPPORTED_TAGS):
-    '''Compile a hex string into Script.
+    '''
+    Sanitizes HTML. Tags not contained as keys in the tag_dictionary input are
+    removed, and child nodes are recursively moved to parent of removed node.
+    Attributes not contained as arguments in tag_dictionary are removed.
+    Doctype is set to <!DOCTYPE html>.
 
     Args:
-        hex_string: A string or unicode string that is the hex representation
-            of a bitcoin script.
+        input_string (str): A (possibly unicode) string representing HTML.
+        tag_dictionary (Option[dict]): A dictionary with tags as keys and attributes as
+            values. By default, this is set to use the supported tags and
+            attributes for the Amazon Kindle, as found at
+            https://kdp.amazon.com/help?topicId=A1JPUWCSD6F59O
 
     Returns:
-        str: A bitcoin script formatted as a string.
+        str: A (possibly unicode) string representing HTML.
 
     Raises:
-        InvalidHexError: Raised if the input hex_string doesn't compile to
-            valid Script.
-        TypeError: Raised if the input hex_string isn't a string.
-
-    Examples:
-        >>> compile_hex('aa106fe28c0ab6f1b372c1a6a246ae63f74f87')
-        'OP_HASH256 6fe28c0ab6f1b372c1a6a246ae63f74f OP_EQUAL'
-        >>> compile_hex('76a90a134408afa258a50ed7a188ac')
-        'OP_DUP OP_HASH160 134408afa258a50ed7a1 OP_EQUALVERIFY OP_CHECKSIG'
-        >>> compile_hex('0504b0bd6342ac')
-        '04b0bd6342 OP_CHECKSIG'
-        >>> compile_hex('aa206fe28c0ab6f1b372c1a6a246ae63f74f931')
-        InvalidHexError
+        TypeError: Raised if input_string isn't a unicode string or string.
     '''
     try:
         assert isinstance(input_string, basestring)
