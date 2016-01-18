@@ -1,4 +1,4 @@
-Bithex
+pypub
 **********
 
 Bithex is a Python 2 library to analyze bitcoin scripts.
@@ -22,7 +22,7 @@ Quickstart
 Copyright and License
 *************************
 
-Copyright (c) 2015 William Cember
+Copyright (c) 2016 William Cember
 
 Licensed under the MIT License
 

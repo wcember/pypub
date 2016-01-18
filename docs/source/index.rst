@@ -1,5 +1,5 @@
 
-bithex: Compile Hex to Script
+pypub: Create epub files easily with python
 ==================================
 
 Contents:
@@ -7,7 +7,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   bithex_cover
+   pypub
    developer_interface
 
 

@@ -8,7 +8,3 @@ Functions
 
 Classes
 =========================
-
-.. autoclass:: pypub.Chapter
-.. autoclass:: pypub.ChapterFactory
-.. autoclass:: pypub.Epub
