@@ -1,22 +1,14 @@
 pypub
 **********
 
-Bithex is a Python 2 library to analyze bitcoin scripts.
+Create epub's using python. Pypub is a python library to create epub files quickly without having to worry about the intracies of the epub specification.
 
 ****************
 Installation
 ****************
-The current release of bithex is available through pip:
+The current release of pypub is available through pip:
 
-    $ pip install bithex
-
-**************
-Quickstart
-**************
-
->>> from bithex import compile_hex
->>> compile_hex('aa206fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d619000000000087')
-'OP_HASH256 6fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000 OP_EQUAL'
+    $ pip install pypub
 
 *************************
 Copyright and License
