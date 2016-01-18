@@ -1,4 +1,1 @@
 sphinxcontrib-napoleon==0.2.9
-lxml==3.3.3
-requests==2.8.1
-jinja2==2.7.3
