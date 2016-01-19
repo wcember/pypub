@@ -165,9 +165,22 @@ class _Content_OPF(_EpubFile):
 
 
 class Epub():
+    '''
+    Class representing an epub. Add chapters to this and then output your ebook
+    as an epub file.
 
-    def __init__(self, output_directory, title, creator='',
-            language='en', rights='', publisher='Cember Corporation'):
+    Args:
+        output_directory (str): The directory to output your epub to once you
+            create it.
+        title (str): The title of the epub.
+        creator (Option[str]): The creator of your epub.
+        language (Option[str]): The language of your epub.
+        rights (Option[str]):
+        publisher (Option[str]):
+    '''
+
+    def __init__(self, output_directory, title, creator='pypub',
+            language='en', rights='', publisher='pypub'):
         def create_directories():
             self.EPUB_DIR = tempfile.mkdtemp()
             self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
@@ -209,6 +222,16 @@ class Epub():
                 '.xhtml'])
 
     def add_chapter(self, c):
+        '''
+        Add a Chapter to your epub.
+
+        Args:
+            c (Chapter): A Chapter object representing your chapter.
+
+        Raises:
+            TypeError: Raised if a Chapter object isn't supplied to this
+                method.
+        '''
         try:
             assert type(c) == chapter.Chapter
         except AssertionError:
@@ -220,6 +243,14 @@ class Epub():
         self.chapters.append(c)
 
     def create_epub(self, epub_name = None):
+        '''
+        Create an epub file from this object. File outputted to the directory
+            you specified when you initialized this object.
+
+        Args:
+            epub_name (str): The name of your epub. This should not contain
+                .epub at the end
+        '''
         def createTOCs_and_ContentOPF():
             for epub_file, name in ((self.toc_html, 'toc.html'),
                     (self.toc_ncx, 'toc.ncx'),

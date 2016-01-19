@@ -14,6 +14,7 @@ The current release of pypub is available through pip:
 ```
 
 # Features #
+* Pypub is **easy to install** and has minimal dependencies.
 * Pypub **abstracts the epub specification**. Create epubs without worrying about what an NCX is.
 * Pypub can **create epubs from websites, html files, strings**, or a combination of all three.
 * Pypub can **clean up poorly formatted and complicated html** so it will cleanly as a chapter in your book.

@@ -29,8 +29,6 @@ class Chapter(object):
         html_title (str): Title string with special characters replaced with
             html-safe sequences
     '''
-
-
     def __init__(self, content, title, url=None):
         self._validate_input_types(content, title)
         self.title = title
