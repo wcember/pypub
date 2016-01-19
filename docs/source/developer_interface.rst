@@ -9,6 +9,9 @@ Functions
 Classes
 =========================
 
+.. autoclass:: pypub.Epub
+   :members: add_chapter, create_epub
+
 .. autoclass:: pypub.Chapter
    :members: write
 
