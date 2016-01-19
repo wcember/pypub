@@ -11,6 +11,10 @@ The current release of pypub is available through pip:
 
 ```python
 >>> import pypub
+>>> my_first_epub = pypub.Epub('EPUB OUTPUT DIRECTORY', 'My First Epub')
+>>> my_first_chapter = pypub.ChapterFactory().create_chapter_from_url('http://www.slate.com/blogs/the_slatest/2016/01/18/report_finds_tennis_match_fixing_continues_to_plague_top_tournaments_and.html'
+>>> my_first_epub.add_chapter(my_first_chapter)
+>>> my_first_epub.create_epub('')
 ```
 
 # Features #
