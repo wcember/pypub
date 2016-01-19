@@ -13,6 +13,14 @@ The current release of pypub is available through pip:
 >>> import pypub
 ```
 
+# Features #
+* Pypub **abstracts the epub specification**. Create epubs without worrying about what an NCX is.
+* Pypub can **create epubs from websites, html files, strings**, or a combination of all three.
+* Pypub can **clean up poorly formatted and complicated html** so it will cleanly as a chapter in your book.
+* Pypub **creates epubs specifically so they can be converted into Amazon Kindle mobi or azw3 files**. Don't know which tags Amazon supports? Don't worry about it because pypub does. 
+* Pypub is **customizable**. Don't like the way pypub sanitizes html files for you ebook? Pypub can be configured with your own sanitation function.
+* Pypub is **licensed under the MIT license**. Do what you want with it.
+
 # Documentation #
 
 Documentation is available at [http://pypub.readthedocs.org/en/latest/developer_interface.html](http://pypub.readthedocs.org/en/latest/developer_interface.html)
