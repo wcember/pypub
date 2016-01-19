@@ -173,10 +173,12 @@ class Epub():
         output_directory (str): The directory to output your epub to once you
             create it.
         title (str): The title of the epub.
-        creator (Option[str]): The creator of your epub.
+        creator (Option[str]): The creator of your epub. By default this is
+            pypub.
         language (Option[str]): The language of your epub.
-        rights (Option[str]):
-        publisher (Option[str]):
+        rights (Option[str]): The rights of your epub.
+        publisher (Option[str]): The publisher of your epub. By default this
+            is pypub.
     '''
 
     def __init__(self, output_directory, title, creator='pypub',
