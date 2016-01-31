@@ -154,3 +154,7 @@ class ChapterFactory(object):
             except IndexError:
                 title = 'Ebook Chapter'
         return Chapter(clean_xhtml_string, title, url)
+
+create_chapter_from_url = ChapterFactory().create_chapter_from_url
+create_chapter_from_file = ChapterFactory().create_chapter_from_file
+create_chapter_from_string = ChapterFactory().create_chapter_from_string
