@@ -186,16 +186,7 @@ class Epub():
 
     def __init__(self, title, creator='pypub',
             language='en', rights='', publisher='pypub'):
-        def create_directories():
-            self.EPUB_DIR = tempfile.mkdtemp()
-            self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
-            self.META_INF_DIR = os.path.join(self.EPUB_DIR, 'META-INF')
-            self.LOCAL_IMAGE_DIR = 'images'
-            self.IMAGE_DIR = os.path.join(self.OEBPS_DIR, self.LOCAL_IMAGE_DIR)
-            os.makedirs(self.OEBPS_DIR)
-            os.makedirs(self.META_INF_DIR)
-            os.makedirs(self.IMAGE_DIR)
-        create_directories()
+        self._create_directories()
         self.chapters = []
         self.title = title
         try:
@@ -215,6 +206,16 @@ class Epub():
                 self.rights, self.publisher, self.uid)
         self.minetype = _Minetype(self.EPUB_DIR)
         self.container = _ContainerFile(self.META_INF_DIR)
+
+        def _create_directories(self):
+            self.EPUB_DIR = tempfile.mkdtemp()
+            self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
+            self.META_INF_DIR = os.path.join(self.EPUB_DIR, 'META-INF')
+            self.LOCAL_IMAGE_DIR = 'images'
+            self.IMAGE_DIR = os.path.join(self.OEBPS_DIR, self.LOCAL_IMAGE_DIR)
+            os.makedirs(self.OEBPS_DIR)
+            os.makedirs(self.META_INF_DIR)
+            os.makedirs(self.IMAGE_DIR)
 
     def _increase_current_chapter_number(self):
         if self.current_chapter_number is None:
@@ -286,5 +287,4 @@ class Epub():
             return epub_full_name
         createTOCs_and_ContentOPF()
         epub_path = turn_zip_into_epub(create_zip_archive(epub_name))
-        shutil.rmtree(self.EPUB_DIR)
         return epub_path
