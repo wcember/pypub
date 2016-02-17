@@ -181,7 +181,7 @@ class Epub():
             is pypub.
     '''
 
-    def __init__(self, output_directory, title, creator='pypub',
+    def __init__(self, title, creator='pypub',
             language='en', rights='', publisher='pypub'):
         def create_directories():
             self.EPUB_DIR = tempfile.mkdtemp()
@@ -189,7 +189,6 @@ class Epub():
             self.META_INF_DIR = os.path.join(self.EPUB_DIR, 'META-INF')
             self.LOCAL_IMAGE_DIR = 'images'
             self.IMAGE_DIR = os.path.join(self.OEBPS_DIR, self.LOCAL_IMAGE_DIR)
-            self.output_directory = output_directory
             os.makedirs(self.OEBPS_DIR)
             os.makedirs(self.META_INF_DIR)
             os.makedirs(self.IMAGE_DIR)
@@ -244,14 +243,14 @@ class Epub():
         self._increase_current_chapter_number()
         self.chapters.append(c)
 
-    def create_epub(self, epub_name = None):
+    def create_epub(self, output_directory, epub_name = None):
         '''
         Create an epub file from this object. File outputted to the directory
             you specified when you initialized this object.
 
         Args:
-            epub_name (str): The name of your epub. This should not contain
-                .epub at the end
+            epub_name (str): The file name of your epub. This should not contain
+                .epub at the end.
         '''
         def createTOCs_and_ContentOPF():
             for epub_file, name in ((self.toc_html, 'toc.html'),
@@ -265,15 +264,14 @@ class Epub():
             except AssertionError:
                 raise TypeError('epub_name must be string or None')
             if epub_name is None:
-                epub_name = str(time.time())
-            epub_name_with_path = os.path.join(self.output_directory,
+                epub_name = self.title
+            epub_name_with_path = os.path.join(output_directory,
                     epub_name)
             try:
                 os.remove(os.path.join(epub_name_with_path, '.zip'))
             except OSError:
                 pass
             shutil.make_archive(epub_name_with_path, 'zip', self.EPUB_DIR)
-            print epub_name_with_path
             return epub_name_with_path + '.zip'
         def turn_zip_into_epub(zip_archive):
             epub_full_name = zip_archive.strip('.zip') + '.epub'

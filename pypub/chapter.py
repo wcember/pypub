@@ -99,7 +99,7 @@ class ChapterFactory(object):
                 url and whose title is that provided or inferred from the url
         '''
         request_object = requests.get(url, headers=self.request_headers)
-        unicode_string = unicode(request_object.text, 'utf-8')
+        unicode_string = request_object.text
         return self.create_chapter_from_string(unicode_string, url, title)
 
     def create_chapter_from_file(self, file_name, url=None, title=None):
