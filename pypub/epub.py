@@ -11,6 +11,7 @@ import time
 
 import jinja2
 import requests
+import requests.packages.urllib3
 
 try:
     imp.find_module('lxml')
@@ -22,6 +23,8 @@ except ImportError:
 
 from constants import *
 import chapter
+
+requests.packages.urllib3.disable_warnings()
 
 
 class _Minetype():
