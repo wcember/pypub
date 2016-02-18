@@ -1,11 +1,30 @@
 import cgi
 import codecs
+import imghdr
+import os
+import tempfile
+import urllib
+import uuid
 
 from bs4 import BeautifulSoup
 import requests
 
 import clean
 import constants
+
+
+class NoUrlError(Exception):
+    def __str__(self):
+        return 'Chapter instance URL attribute is None'
+
+def save_image(image_url, image_directory, image_name):
+    f, temp_file_name = tempfile.mkstemp()
+    temp_image = urllib.urlretrieve(image_url, temp_file_name)[0]
+    image_type = imghdr.what(temp_image)
+    os.close(f)
+    os.remove(temp_file_name)
+    full_image_file_name = os.path.join(image_directory, image_name + '.' + image_type)
+    urllib.urlretrieve(image_url, full_image_file_name)
 
 
 class Chapter(object):
@@ -62,6 +81,31 @@ class Chapter(object):
             assert content != ''
         except AssertionError:
             raise ValueError('content cannot be empty string')
+
+##    def get_url(self):
+##        if self.url is not None:
+##            return self.url
+##        else:
+##            raise NoUrlError()
+##
+##    def replace_image(self, image_url, image_node, output_folder,
+##            local_folder_name, image_name = None):
+##        if image_name is None:
+##            image_name = str(uuid.uuid4())
+##        try:
+##            image_extension = save_image(image_url, output_folder,
+##                    image_name)['image type']
+##            image_node.attrib['src'] = 'images' + '/' + image_name + '.' + image_extension
+##        except ImageErrorException:
+##            image_node.getparent().remove(image_node)
+##
+##    def _replace_images_in_chapter(self, image_folder, local_image_folder):
+##        image_url_list = self.get_content_as_element().xpath('//img')
+##        for image in image_url_list:
+##            local_image_path = image.attrib['src']
+##            full_image_path = urlparse.urljoin(self.get_url(), local_image_path)
+##            self.replace_image(full_image_path, image, image_folder,
+##                    local_image_folder)
 
 
 class ChapterFactory(object):
