@@ -17,14 +17,36 @@ class NoUrlError(Exception):
     def __str__(self):
         return 'Chapter instance URL attribute is None'
 
+class ImageErrorException(Exception):
+    def __init__(self, image_url):
+        self.image_url = image_url
+    def __str__(self):
+        return 'Error downloading image from ' + self.image_url
+
 def save_image(image_url, image_directory, image_name):
+    '''
+    Saves an online image from image_url to image_directory with the name image_name.
+    Returns the extension of the image saved, which is determined dynamically.
+
+    Args:
+        image_url (str): The url of the image.
+        image_directory (str): The directory to save the image in.
+        image_name (str): The file name to save the image as.
+
+    Raises:
+        ImageErrorException: Raised if unable to save the image at image_url
+    '''
     f, temp_file_name = tempfile.mkstemp()
-    temp_image = urllib.urlretrieve(image_url, temp_file_name)[0]
-    image_type = imghdr.what(temp_image)
-    os.close(f)
-    os.remove(temp_file_name)
+    try:
+        temp_image = urllib.urlretrieve(image_url, temp_file_name)[0]
+        image_type = imghdr.what(temp_image)
+        os.close(f)
+        os.remove(temp_file_name)
+    except Exception:
+        raise ImageErrorException(image_url)
     full_image_file_name = os.path.join(image_directory, image_name + '.' + image_type)
     urllib.urlretrieve(image_url, full_image_file_name)
+    return image_type
 
 
 class Chapter(object):
@@ -52,6 +74,7 @@ class Chapter(object):
         self._validate_input_types(content, title)
         self.title = title
         self.content = content
+        self._content_tree = BeautifulSoup(self.content, 'html.parser')
         self.url = url
         self.html_title = cgi.escape(self.title, quote=True)
 
@@ -82,30 +105,38 @@ class Chapter(object):
         except AssertionError:
             raise ValueError('content cannot be empty string')
 
-##    def get_url(self):
-##        if self.url is not None:
-##            return self.url
-##        else:
-##            raise NoUrlError()
-##
-##    def replace_image(self, image_url, image_node, output_folder,
-##            local_folder_name, image_name = None):
-##        if image_name is None:
-##            image_name = str(uuid.uuid4())
-##        try:
-##            image_extension = save_image(image_url, output_folder,
-##                    image_name)['image type']
-##            image_node.attrib['src'] = 'images' + '/' + image_name + '.' + image_extension
-##        except ImageErrorException:
-##            image_node.getparent().remove(image_node)
-##
-##    def _replace_images_in_chapter(self, image_folder, local_image_folder):
-##        image_url_list = self.get_content_as_element().xpath('//img')
-##        for image in image_url_list:
-##            local_image_path = image.attrib['src']
-##            full_image_path = urlparse.urljoin(self.get_url(), local_image_path)
-##            self.replace_image(full_image_path, image, image_folder,
-##                    local_image_folder)
+    def get_url(self):
+        if self.url is not None:
+            return self.url
+        else:
+            raise NoUrlError()
+
+    def _replace_image(self, image_url, image_node, output_folder,
+            local_folder_name, image_name = None):
+        if image_name is None:
+            image_name = str(uuid.uuid4())
+        try:
+            image_extension = save_image(image_url, output_folder,
+                    image_name)
+            image_node.attrs['src'] = 'images' + '/' + image_name + '.' + image_extension
+        except ImageErrorException:
+            image_node.extract()
+
+    def _get_image_urls(self):
+        image_nodes = self._content_tree.find_all('img')
+        image_urls = [node.attrib['src'] for node in image_nodes]
+        return image_urls
+
+    def _replace_images_in_chapter(self, image_folder, local_image_folder):
+        image_url_list = self._get_image_urls()
+        for image_url in image_url_list:
+            full_image_path = urlparse.urljoin(self.get_url(), local_image_path)
+            self.replace_image(full_image_path, image, image_folder,
+                    local_image_folder)
+        unformatted_html_unicode_string = unicode(self._content_tree.prettify(encoding='utf-8', formatter= EntitySubstitution.substitute_html), encoding = 'utf-8')
+        #fix <br> tags since not handled well by default by bs4
+        unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
+        return unformatted_html_unicode_string
 
 
 class ChapterFactory(object):
