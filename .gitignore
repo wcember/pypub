@@ -43,3 +43,6 @@ coverage.xml
 
 # Sphinx documentation
 docs/build/
+
+#intellij
+.idea/
