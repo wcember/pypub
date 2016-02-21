@@ -49,7 +49,7 @@ def save_image(image_url, image_directory, image_name):
     except Exception:
         raise ImageErrorException(image_url)
     if image_type is None:
-        raise ImageErrorException
+        raise ImageErrorException(image_url)
     full_image_file_name = os.path.join(image_directory, image_name + '.' + image_type)
     urllib.urlretrieve(image_url, full_image_file_name)
     return image_type
