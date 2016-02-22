@@ -136,8 +136,9 @@ class Chapter(object):
 
     def _get_image_urls(self):
         image_nodes = self._content_tree.find_all('img')
-        image_urls = [node.attrib['src'] for node in image_nodes]
-        return image_urls
+        raw_image_urls = [node['src'] for node in image_nodes]
+        full_image_urls = [urlparse.urljoin(self.url, image_url) for image_url in raw_image_urls]
+        return full_image_urls
 
     def _replace_images_in_chapter(self, image_folder, local_image_folder):
         image_url_list = self._get_image_urls()
@@ -146,7 +147,7 @@ class Chapter(object):
             _replace_image(full_image_path, image_url, image_folder, local_image_folder)
         unformatted_html_unicode_string = unicode(self._content_tree.prettify(encoding='utf-8',
                                                                               formatter=EntitySubstitution.substitute_html),
-                                                                              encoding='utf-8')
+                                                  encoding='utf-8')
         unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
         return unformatted_html_unicode_string
 
