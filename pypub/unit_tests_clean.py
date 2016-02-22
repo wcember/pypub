@@ -4,11 +4,14 @@ import unittest
 
 from clean import clean, condense, html_to_xhtml
 
+
 class CleanTests(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
+
     def test_condense(self):
         pass
+
     def test_clean_tags_full_html(self):
         s = u'''
                 <!DOCTYPE html>
@@ -86,7 +89,7 @@ class CleanTests(unittest.TestCase):
                  </body>
                 </html>
                 '''
-        self.assertEqual(condense(html_to_xhtml(clean((s1)))), s)
+        self.assertEqual(condense(html_to_xhtml(clean(s1))), s)
 
 
 if __name__ == '__main__':

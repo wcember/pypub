@@ -8,14 +8,14 @@ import constants
 
 def clean(input_string,
         tag_dictionary=constants.SUPPORTED_TAGS):
-    '''
+    """
     Sanitizes HTML. Tags not contained as keys in the tag_dictionary input are
     removed, and child nodes are recursively moved to parent of removed node.
     Attributes not contained as arguments in tag_dictionary are removed.
     Doctype is set to <!DOCTYPE html>.
 
     Args:
-        input_string (str): A (possibly unicode) string representing HTML.
+        input_string (basestring): A (possibly unicode) string representing HTML.
         tag_dictionary (Option[dict]): A dictionary with tags as keys and
             attributes as values. This operates as a whitelist--i.e. if a tag
             isn't contained, it will be removed. By default, this is set to
@@ -27,7 +27,7 @@ def clean(input_string,
 
     Raises:
         TypeError: Raised if input_string isn't a unicode string or string.
-    '''
+    """
     try:
         assert isinstance(input_string, basestring)
     except AssertionError:

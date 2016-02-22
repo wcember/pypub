@@ -32,7 +32,7 @@ class TestEpub(unittest.TestCase):
 
     def test_TOCHTML(self):
         def create_TOC():
-            self.test_toc = epub._TOC_HTML()
+            self.test_toc = epub.TocHtml()
             self.test_toc.add_chapters(self.chapter_list)
             self.toc_element = self.test_toc.get_content_as_element()
         def check_titles():
@@ -51,7 +51,7 @@ class TestEpub(unittest.TestCase):
 
     def test_TOCNCX(self):
         def createTOC():
-            self.test_toc = epub._TOC_NCX()
+            self.test_toc = epub.TocNcx()
             self.test_toc.add_chapters(self.chapter_list)
             self.toc_element = self.test_toc.get_content_as_element()
         def checkTitles():
@@ -68,7 +68,7 @@ class TestEpub(unittest.TestCase):
 
     def test_ContentOPF(self):
         def createContentOPF():
-            self.test_opf = epub._Content_OPF('Sample Title')
+            self.test_opf = epub.ContentOpf('Sample Title')
             self.test_opf.add_chapters(self.chapter_list)
             opf_file = os.path.join(TEST_DIR, 'epub_output', 'opf.xml')
             self.test_opf.write(opf_file)
