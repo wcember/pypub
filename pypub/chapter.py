@@ -110,7 +110,6 @@ class Chapter(object):
         with open(file_name, 'wb') as f:
             f.write(self.content.encode('utf-8'))
 
-    @staticmethod
     def _validate_input_types(self, content, title):
         try:
             assert isinstance(content, basestring)

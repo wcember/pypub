@@ -207,15 +207,15 @@ class Epub():
         self.minetype = _Minetype(self.EPUB_DIR)
         self.container = _ContainerFile(self.META_INF_DIR)
 
-        def _create_directories(self):
-            self.EPUB_DIR = tempfile.mkdtemp()
-            self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
-            self.META_INF_DIR = os.path.join(self.EPUB_DIR, 'META-INF')
-            self.LOCAL_IMAGE_DIR = 'images'
-            self.IMAGE_DIR = os.path.join(self.OEBPS_DIR, self.LOCAL_IMAGE_DIR)
-            os.makedirs(self.OEBPS_DIR)
-            os.makedirs(self.META_INF_DIR)
-            os.makedirs(self.IMAGE_DIR)
+    def _create_directories(self):
+        self.EPUB_DIR = tempfile.mkdtemp()
+        self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
+        self.META_INF_DIR = os.path.join(self.EPUB_DIR, 'META-INF')
+        self.LOCAL_IMAGE_DIR = 'images'
+        self.IMAGE_DIR = os.path.join(self.OEBPS_DIR, self.LOCAL_IMAGE_DIR)
+        os.makedirs(self.OEBPS_DIR)
+        os.makedirs(self.META_INF_DIR)
+        os.makedirs(self.IMAGE_DIR)
 
     def _increase_current_chapter_number(self):
         if self.current_chapter_number is None:
