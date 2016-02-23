@@ -40,7 +40,8 @@ class ChapterTests(unittest.TestCase):
                              'http://williamcember.com/media/icon_linkedin.png',
                              'http://williamcember.com/media/GitHub-Mark-Light-120px-plus.png',
                              'http://williamcember.com/media/icon_twitter.png']
-        self.assertEqual(test_chapter_2._get_image_urls(), test_image_list_2)
+        image_url_list_2_calced = [t[1] for t in test_chapter_2._get_image_urls()]
+        self.assertEqual(image_url_list_2_calced, test_image_list_2)
 
 
 if __name__ == '__main__':

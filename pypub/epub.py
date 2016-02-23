@@ -13,6 +13,7 @@ import requests.packages.urllib3
 try:
     imp.find_module('lxml')
     lxml_module_exists = True
+    import lxml.etree
     import lxml.html
     import lxml.html.builder
 except ImportError:
@@ -83,11 +84,8 @@ class _EpubFile(object):
 
 class TocHtml(_EpubFile):
 
-    def __init__(self,
-            template_file=os.path.join(EPUB_TEMPLATES_DIR, 'toc.html'),
-            **non_chapter_parameters):
-        super(TocHtml, self).__init__(template_file,
-                                      **non_chapter_parameters)
+    def __init__(self, template_file=os.path.join(EPUB_TEMPLATES_DIR, 'toc.html'), **non_chapter_parameters):
+        super(TocHtml, self).__init__(template_file, **non_chapter_parameters)
 
     def add_chapters(self, chapter_list):
         chapter_numbers = range(len(chapter_list))
@@ -236,6 +234,14 @@ class Epub(object):
         c.write(chapter_file_output)
         self._increase_current_chapter_number()
         self.chapters.append(c)
+
+    def replace_images(self):
+        """
+        Replaces all images linked in chapters to local images readable by your epub. If an image is unable to be
+            replace, it will be deleted.
+        """
+        for c in self.chapters:
+            c._replace_images_in_chapter()
 
     def create_epub(self, output_directory, epub_name=None):
         """

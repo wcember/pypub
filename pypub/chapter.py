@@ -7,6 +7,7 @@ import urllib
 import urlparse
 import uuid
 
+import bs4
 from bs4 import BeautifulSoup
 from bs4.dammit import EntitySubstitution
 import requests
@@ -55,16 +56,31 @@ def save_image(image_url, image_directory, image_name):
     return image_type
 
 
-def _replace_image(image_url, image_node, output_folder,
+def _replace_image(image_url, image_tag, ebook_folder,
                    image_name=None):
+    """
+    Replaces the src of an image to link to the local copy in the images folder of the ebook. Tightly coupled with bs4
+        package.
+
+    Args:
+        image_url (str): The url of the image.
+        image_tag (bs4.element.Tag): The bs4 tag containing the image.
+        ebook_folder (str): The directory where the ebook files are being saved. This must contain a subdirectory
+            called "images".
+        image_name (Option[str]): The short name to save the image as. Should not contain a directory or an extension.
+    """
     if image_name is None:
         image_name = str(uuid.uuid4())
     try:
-        image_extension = save_image(image_url, output_folder,
+        image_full_path = os.path.join(ebook_folder, 'images')
+        assert os.path.exists(image_full_path)
+        image_extension = save_image(image_url, image_full_path,
                                      image_name)
-        image_node.attrs['src'] = 'images' + '/' + image_name + '.' + image_extension
+        image_tag['src'] = 'images' + '/' + image_name + '.' + image_extension
     except ImageErrorException:
-        image_node.extract()
+        image_tag.extract()
+    except AssertionError:
+        raise ValueError('%s doesn\'t exist or doesn\'t contain a subdirectory images' % ebook_folder)
 
 
 class Chapter(object):
@@ -138,13 +154,12 @@ class Chapter(object):
         image_nodes = self._content_tree.find_all('img')
         raw_image_urls = [node['src'] for node in image_nodes]
         full_image_urls = [urlparse.urljoin(self.url, image_url) for image_url in raw_image_urls]
-        return full_image_urls
+        return zip(image_nodes, full_image_urls)
 
-    def _replace_images_in_chapter(self, image_folder, local_image_folder):
+    def _replace_images_in_chapter(self, image_folder):
         image_url_list = self._get_image_urls()
-        for image_url in image_url_list:
-            full_image_path = urlparse.urljoin(self.get_url(), local_image_folder)
-            _replace_image(full_image_path, image_url, image_folder, local_image_folder)
+        for image_url, image_tag in image_url_list:
+            _replace_image(image_url, image_tag, image_folder)
         unformatted_html_unicode_string = unicode(self._content_tree.prettify(encoding='utf-8',
                                                                               formatter=EntitySubstitution.substitute_html),
                                                   encoding='utf-8')
