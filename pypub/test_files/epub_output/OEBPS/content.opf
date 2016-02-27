@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <package xmlns="http://www.idpf.org/2007/opf" version="2.0">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
-    <dc:title>Sample Title</dc:title>
-    <dc:creator opf:role="aut"></dc:creator>
-    <dc:language></dc:language>
+    <dc:title>Test Epub</dc:title>
+    <dc:creator opf:role="aut">pypub</dc:creator>
+    <dc:language>en</dc:language>
     <dc:rights></dc:rights>
-    <dc:publisher></dc:publisher>
-    <dc:identifier opf:scheme="UUID"></dc:identifier>
+    <dc:publisher>pypub</dc:publisher>
+    <dc:identifier opf:scheme="UUID">E06HB4UJHVFN</dc:identifier>
     <dc:date>02-27-2016</dc:date>
   </metadata>
   <manifest>
@@ -19,8 +19,6 @@
     
     <item href="2.xhtml" id="2" media-type="application/xhtml+xml"/>
     
-    <item href="3.xhtml" id="3" media-type="application/xhtml+xml"/>
-    
   </manifest>
   <spine toc="ncx">
     <itemref idref="toc"/>
@@ -30,8 +28,6 @@
     <itemref idref="1"/>
     
     <itemref idref="2"/>
-    
-    <itemref idref="3"/>
     
   </spine>
   <guide>

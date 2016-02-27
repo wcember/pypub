@@ -92,8 +92,8 @@ class TestEpub(unittest.TestCase):
 
     def test_create_epub(self):
         epub_directory = os.path.join(TEST_DIR, 'epub_output')
-        e = epub.Epub('Test Epub')
-        for index, c in enumerate(self.chapter_list):
+        e = epub.Epub('Test Epub', epub_dir=epub_directory)
+        for index, c in enumerate(self.chapter_list[:3]):
             output_name = os.path.join(TEST_DIR,
                     'epub_output', str(index) + '.xhtml')
             c.write(output_name)

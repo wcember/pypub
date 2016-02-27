@@ -176,8 +176,8 @@ class Epub(object):
             is pypub.
     """
 
-    def __init__(self, title, creator='pypub', language='en', rights='', publisher='pypub'):
-        self._create_directories()
+    def __init__(self, title, creator='pypub', language='en', rights='', publisher='pypub', epub_dir=None):
+        self._create_directories(epub_dir)
         self.chapters = []
         self.title = title
         try:
@@ -197,8 +197,10 @@ class Epub(object):
         self.minetype = _Minetype(self.EPUB_DIR)
         self.container = _ContainerFile(self.META_INF_DIR)
 
-    def _create_directories(self):
-        self.EPUB_DIR = tempfile.mkdtemp()
+    def _create_directories(self, epub_dir=None):
+        if epub_dir is None:
+            self.EPUB_DIR = tempfile.mkdtemp()
+        else: self.EPUB_DIR = epub_dir
         self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
         self.META_INF_DIR = os.path.join(self.EPUB_DIR, 'META-INF')
         self.LOCAL_IMAGE_DIR = 'images'
@@ -231,6 +233,7 @@ class Epub(object):
         except AssertionError:
             raise TypeError('chapter must be of type Chapter')
         chapter_file_output = os.path.join(self.OEBPS_DIR, self.current_chapter_path)
+        c._replace_images_in_chapter(self.OEBPS_DIR)
         c.write(chapter_file_output)
         self._increase_current_chapter_number()
         self.chapters.append(c)
