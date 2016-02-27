@@ -91,7 +91,9 @@ class TestEpub(unittest.TestCase):
             self.assertRaises(NotImplementedError, createContentOPF)
 
     def test_create_epub(self):
-        epub_directory = os.path.join(TEST_DIR, 'epub_output')
+        epub_dir_ending = time.strftime("%m%d%Y%H%M%S")
+        epub_directory = os.path.join(TEST_DIR, 'epub_output', 'epub files' + epub_dir_ending)
+        os.makedirs(epub_directory)
         e = epub.Epub('Test Epub', epub_dir=epub_directory)
         for index, c in enumerate(self.chapter_list[:3]):
             output_name = os.path.join(TEST_DIR,
