@@ -238,14 +238,6 @@ class Epub(object):
         self._increase_current_chapter_number()
         self.chapters.append(c)
 
-    def replace_images(self):
-        """
-        Replaces all images linked in chapters to local images readable by your epub. If an image is unable to be
-            replace, it will be deleted.
-        """
-        for c in self.chapters:
-            c._replace_images_in_chapter()
-
     def create_epub(self, output_directory, epub_name=None):
         """
         Create an epub file from this object.

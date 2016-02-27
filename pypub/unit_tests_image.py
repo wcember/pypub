@@ -48,9 +48,7 @@ class ChapterTests(unittest.TestCase):
         test_url = 'http://williamcember.com'
         test_ebook_dir = os.path.join(test_directory, 'epub_output')
         c = chapter.create_chapter_from_url(test_url)
-        print c._get_image_urls()
         c._replace_images_in_chapter(test_ebook_dir)
-        print c._get_image_urls()
         c.write(os.path.join(test_directory, 'test_cember.xhtml'))
 
 
