@@ -69,6 +69,10 @@ def _replace_image(image_url, image_tag, ebook_folder,
             called "images".
         image_name (Option[str]): The short name to save the image as. Should not contain a directory or an extension.
     """
+    try:
+        assert isinstance(image_tag, bs4.element.Tag)
+    except AssertionError:
+        raise TypeError("image_tag cannot be of type " + str(type(image_tag)))
     if image_name is None:
         image_name = str(uuid.uuid4())
     try:
@@ -156,15 +160,15 @@ class Chapter(object):
         full_image_urls = [urlparse.urljoin(self.url, image_url) for image_url in raw_image_urls]
         return zip(image_nodes, full_image_urls)
 
-    def _replace_images_in_chapter(self, image_folder):
+    def _replace_images_in_chapter(self, ebook_folder):
         image_url_list = self._get_image_urls()
-        for image_url, image_tag in image_url_list:
-            _replace_image(image_url, image_tag, image_folder)
+        for image_tag, image_url in image_url_list:
+            _replace_image(image_url, image_tag, ebook_folder)
         unformatted_html_unicode_string = unicode(self._content_tree.prettify(encoding='utf-8',
                                                                               formatter=EntitySubstitution.substitute_html),
                                                   encoding='utf-8')
         unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
-        return unformatted_html_unicode_string
+        self.content = unformatted_html_unicode_string
 
 
 class ChapterFactory(object):
