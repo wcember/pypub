@@ -2,6 +2,7 @@ import cgi
 import codecs
 import imghdr
 import os
+import shutil
 import tempfile
 import urllib
 import urlparse
@@ -28,6 +29,20 @@ class ImageErrorException(Exception):
         return 'Error downloading image from ' + self.image_url
 
 
+def get_image_type(url):
+    for ending in ['jpg', 'jpeg', '.gif' '.png']:
+        if url.endswith(ending):
+            return ending
+    else:
+        try:
+            f, temp_file_name = tempfile.mkstemp()
+            urllib.urlretrieve(url, temp_file_name)
+            image_type = imghdr.what(temp_file_name)
+            return image_type
+        except IOError:
+            return None
+
+
 def save_image(image_url, image_directory, image_name):
     """
     Saves an online image from image_url to image_directory with the name image_name.
@@ -41,18 +56,14 @@ def save_image(image_url, image_directory, image_name):
     Raises:
         ImageErrorException: Raised if unable to save the image at image_url
     """
-    f, temp_file_name = tempfile.mkstemp()
-    try:
-        temp_image = urllib.urlretrieve(image_url, temp_file_name)[0]
-        image_type = imghdr.what(temp_image)
-        os.close(f)
-        os.remove(temp_file_name)
-    except Exception:
-        raise ImageErrorException(image_url)
+    image_type = get_image_type(image_url)
     if image_type is None:
         raise ImageErrorException(image_url)
     full_image_file_name = os.path.join(image_directory, image_name + '.' + image_type)
-    urllib.urlretrieve(image_url, full_image_file_name)
+    try:
+        urllib.urlretrieve(image_url, full_image_file_name)
+    except IOError:
+        raise ImageErrorException(image_url)
     return image_type
 
 
