@@ -61,7 +61,17 @@ def save_image(image_url, image_directory, image_name):
         raise ImageErrorException(image_url)
     full_image_file_name = os.path.join(image_directory, image_name + '.' + image_type)
     try:
-        urllib.urlretrieve(image_url, full_image_file_name)
+        # urllib.urlretrieve(image_url, full_image_file_name)
+        with open(full_image_file_name, 'wb') as f:
+            user_agent = r'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0'
+            request_headers = {'User-Agent': user_agent}
+            requests_object = requests.get(image_url, headers=request_headers)
+            try:
+                content = requests_object.content
+                #Check for empty response
+                f.write(content)
+            except AttributeError:
+                raise ImageErrorException(image_url)
     except IOError:
         raise ImageErrorException(image_url)
     return image_type
