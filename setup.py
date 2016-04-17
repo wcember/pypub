@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='pypub',
-    version='0.7',
+    version='0.8',
     packages=['pypub',],
     package_data={'pypub': ['epub_templates/*',]},
     author = 'William Cember',
