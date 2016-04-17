@@ -177,7 +177,7 @@ class Chapter(object):
 
     def _get_image_urls(self):
         image_nodes = self._content_tree.find_all('img')
-        raw_image_urls = [node['src'] for node in image_nodes]
+        raw_image_urls = [node['src'] for node in image_nodes if 'src' in node]
         full_image_urls = [urlparse.urljoin(self.url, image_url) for image_url in raw_image_urls]
         return zip(image_nodes, full_image_urls)
 
