@@ -225,8 +225,17 @@ class ChapterFactory(object):
         Returns:
             Chapter: A chapter object whose content is the webpage at the given
                 url and whose title is that provided or inferred from the url
+
+        Raises:
+            ValueError: Raised if unable to connect to url supplied
         """
-        request_object = requests.get(url, headers=self.request_headers)
+        try:
+            request_object = requests.get(url, headers=self.request_headers)
+        except (requests.exceptions.MissingSchema,
+                requests.exceptions.ConnectionError):
+            raise ValueError("%s is an invalid url or no network connection" % url)
+        except requests.exceptions.SSLError:
+            raise ValueError("Url %s doesn't have valid SSL certificate" % url)
         unicode_string = request_object.text
         return self.create_chapter_from_string(unicode_string, url, title)
 
