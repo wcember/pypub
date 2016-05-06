@@ -165,8 +165,6 @@ class Epub(object):
     as an epub file.
 
     Args:
-        output_directory (str): The directory to output your epub to once you
-            create it.
         title (str): The title of the epub.
         creator (Option[str]): The creator of your epub. By default this is
             pypub.
