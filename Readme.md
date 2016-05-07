@@ -7,6 +7,8 @@ The current release of pypub is available through pip:
 
     $ pip install pypub
 
+Pypub is currently only compatible with Python 2.
+
 # Quickstart #
 
 ```python
