@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='pypub',
-    version='0.8',
+    version='0.9',
     packages=['pypub',],
     package_data={'pypub': ['epub_templates/*',]},
     author = 'William Cember',
@@ -14,5 +14,5 @@ setup(
             'jinja2',
             'requests',
             ],
-    description= "Create epub's using python. Pypub is a python library to create epub files quickly without having to worry about the intracies of the epub specification.",
+    description= "Create epub's using python. Pypub is a python library to create epub files quickly without having to worry about the intricacies of the epub specification.",
 )
