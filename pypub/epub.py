@@ -243,7 +243,7 @@ class Epub(object):
         Args:
             output_directory (str): Directory to output the epub file to
             epub_name (Option[str]): The file name of your epub. This should not contain
-                .epub at the end.
+                .epub at the end. If this argument is not provided, defaults to the title of the epub.
         """
         def createTOCs_and_ContentOPF():
             for epub_file, name in ((self.toc_html, 'toc.html'), (self.toc_ncx, 'toc.ncx'), (self.opf, 'content.opf'),):
