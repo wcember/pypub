@@ -51,6 +51,8 @@ def clean(input_string,
     unformatted_html_unicode_string = unicode(root.prettify(encoding='utf-8', formatter=EntitySubstitution.substitute_html), encoding = 'utf-8')
     #fix <br> tags since not handled well by default by bs4
     unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
+    #remove &nbsp; and replace with space since not handled well by certain e-readers
+    unformatted_html_unicode_string = unformatted_html_unicode_string.replace('&nbsp;', ' ')
     return unformatted_html_unicode_string
 
 def condense(input_string):

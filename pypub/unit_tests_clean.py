@@ -19,7 +19,7 @@ class CleanTests(unittest.TestCase):
                  <head>
                  </head>
                  <body>
-                  <div>Hello</div>
+                  <div>Hello </div>
                  </body>
                 </html>
                 '''
@@ -29,7 +29,7 @@ class CleanTests(unittest.TestCase):
                  <head>
                  </head>
                  <body>
-                  <div>Hello</div>
+                  <div>Hello </div>
                   <script>Uh oh...it's an evil script!</script>
                  </body>
                 </html>
@@ -40,7 +40,7 @@ class CleanTests(unittest.TestCase):
                  <head>
                  </head>
                  <body>
-                  <div>Hello</div>
+                  <div>Hello </div>
                  </body>
                  <script>Uh oh...it's an evil script again!</script>
                 </html>
@@ -51,7 +51,7 @@ class CleanTests(unittest.TestCase):
                  <head>
                  </head>
                  <body>
-                  <div>Hello</div>
+                  <div>Hello </div>
                  </body>
                  <video>Play me!</video>
                 </html>
@@ -63,17 +63,32 @@ class CleanTests(unittest.TestCase):
                  </head>
                  <body>
                   <video>
-                   <div>Hello</div>
+                   <div>Hello </div>
                   </video>
                  </body>
                  <video>Play me!</video>
                 </html>
                 '''
+
+        s5 = u'''
+        <!DOCTYPE html>
+        <html>
+         <head>
+         </head>
+         <body>
+          <video>
+           <div>Hello&nbsp;</div>
+          </video>
+         </body>
+         <video>Play me!</video>
+        </html>
+        '''
         self.assertEqual(condense(clean(s)), condense(s))
         self.assertEqual(condense(clean(s1)), condense(s))
         self.assertEqual(condense(clean(s2)), condense(s))
         self.assertEqual(condense(clean(s3)), condense(s))
         self.assertEqual(condense(clean(s4)), condense(s))
+        self.assertEqual(condense(clean(s5)), condense(s))
 
     def test_html_to_xhtml(self):
         s = u'<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><div id="Test">Hello</div><br /><br /></body></html>'

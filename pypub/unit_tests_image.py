@@ -21,7 +21,7 @@ class ChapterTests(unittest.TestCase):
         image_url_list = ['http://www.fangraphs.com/images/247_90_fangraphs.png',
                           'http://bothsides.wpengine.netdna-cdn.com/wp-content/uploads/2015/11/bothsides1.jpg']
         image_type_list = ['png',
-                           'jpeg']
+                           'jpg']
         for index, image in enumerate(image_url_list):
             self.assertEqual(chapter.save_image(image_url_list[index], test_directory,
                                                 'test image ' + str(index)),
