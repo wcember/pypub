@@ -8,6 +8,7 @@ Contents:
    :maxdepth: 2
 
    pypub
+   tutorial_reddit
    developer_interface
 
 
