@@ -37,7 +37,7 @@ Now that we have a list of url strings, we can use pypub to download the content
 
 With the Epub object we just created, let's add a chapter to it for every story we in our url list.
 
-    >>> for url in url_list:
+    >>> for url in top_submission_url_list:
             c = pypub.create_chapter_from_url(url)
             epub.add_chapter
    
