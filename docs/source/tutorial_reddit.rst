@@ -43,4 +43,15 @@ Finally, let's create our epub file. The below code saves it in the current work
 
     >>> epub.create_epub(os.getcwd())
 
+At this point, in the directory you're working in, you should have a file *TrueReddit - Top Stories.epub`*. This is your ebook with the top stories from r/TrueReddit and you should be able to read on your favorite device (unless that device is a kindle...see the next section).
+
+****************
+(Optional) Convert to mobi
+****************
+If you're like me, then you like reading things on your kindle (which is why I created pypub in the first place). Unfortunately, kindle uses it's own format for ebooks.
+
+Luckily, Amazon provided a tool, KindleGen to convert epubs (and other formats) to mobi so they can be viewed on kindle.
+
+First, copy the full path of the KindleGen executable installed. Alternatively, copy it over to the directory where 
+
 
