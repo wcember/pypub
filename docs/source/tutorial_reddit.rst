@@ -5,14 +5,14 @@ Ready to get started? In this tutorial we will create an epub from the top stori
 
 Before you start, make sure the following is true
 
-- Make sure the most recent version of `pypub <http://pypub.readthedocs.io/en/latest/pypub.html#installation>` is installed
-- In this tutorial, we are going to use the `praw <https://praw.readthedocs.io/en/stable/#installation>` package to access reddit's api. Download that too. While praw is necessary for this tutorial, you do not need it to use pypub.
-- (Optional) If you want to read your ebook on kindle, you'll need to convert it to a mobi file. Download `KindleGen <http://www.amazon.com/gp/feature.html?docId=1000765211>` to do this.
+- Make sure the most recent version of `pypub <http://pypub.readthedocs.io/en/latest/pypub.html#installation>`_ is installed
+- In this tutorial, we are going to use the python package `praw <https://praw.readthedocs.io/en/stable/#installation>`_ to access reddit's api. Download that too. While praw is necessary for this tutorial, you do not need it to use pypub.
+- (Optional) If you want to read your ebook on kindle, you'll need to convert it to a mobi file. Download `KindleGen <http://www.amazon.com/gp/feature.html?docId=1000765211>`_ to do this.
 
 ****************
 Find the stories you're interested
 ****************
-For this tutorial, we are going to grab the top stories from the subreddit `r/TrueReddit <http://reddit.com/r/TrueReddit/>`. Pypub works with (most) websites, and the code contained here is easily generalizable to other content sources.
+For this tutorial, we are going to grab the top stories from the subreddit `r/TrueReddit <http://reddit.com/r/TrueReddit/>`_. Pypub works with (most) websites, and the code contained here is easily generalizable to other content sources.
 
 Let's begin by importing pypub as well as the other python libraries we're using for this tutorial
 
