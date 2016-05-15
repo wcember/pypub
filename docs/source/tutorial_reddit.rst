@@ -22,7 +22,8 @@ Let's begin by importing pypub as well as the other python libraries we're using
 
 Now let's get the current top ten stories from r/TrueReddit. The below code is necessary for this tutorial, but all we're returning here is a list of urls of stories we are interested in. Feel free to substitute here code to get whatever you are interested in (posts from your favorite blog, magazine articles, etc.)
 
-    >>> top_submission_list = praw.Reddit(user_agent='pypub').get_subreddit('TrueReddit').get_top(limit=number_of_stories)
+    >>> praw_object = praw.Reddit(user_agent='pypub/1.0')
+    >>> top_submission_list = praw_object.get_subreddit('TrueReddit').get_top(limit=10)
     >>> top_submission_url_list = [submission.url for submission in top_submission_list]
 
 top_submission_url_list is a python list of strings, where each string represents a url for one of the top ten stories from r/TrueReddit.
