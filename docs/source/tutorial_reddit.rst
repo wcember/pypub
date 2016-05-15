@@ -19,14 +19,14 @@ Let's begin by importing pypub as well as the other python libraries we're using
 
     >>> import pypub
     >>> import praw, os
-
+ 
 Now let's get the current top ten stories from r/TrueReddit. The below code is necessary for this tutorial, but all we're returning here is a list of urls of stories we are interested in. Feel free to substitute here code to get whatever you are interested in (posts from your favorite blog, magazine articles, etc.)
 
     >>> praw_object = praw.Reddit(user_agent='pypub/1.0')
     >>> top_submission_list = praw_object.get_subreddit('TrueReddit').get_top(limit=10)
     >>> top_submission_url_list = [submission.url for submission in top_submission_list]
 
-top_submission_url_list is a python list of strings, where each string represents a url for one of the top ten stories from r/TrueReddit.
+top_submission_url_list is a python list of strings, where each string represents a url for one of the top ten stories from r/TrueReddit [#f1]_.
 
 ****************
 Create the epub
@@ -60,6 +60,6 @@ If the kindlegen executable is saved in the same directory as *TrueReddit - Top 
 
     > kindlegen "TrueReddit - Top Stories.epub"
 
+.. rubric:: Footnotes
 
-
-
+.. [#f1] If you are using a version of python earlier than 2.7.9, you may get SNIMissingWarning exception. You can safely ignore this.
