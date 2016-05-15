@@ -25,3 +25,21 @@ Now let's get the current top ten stories from r/TrueReddit. The below code is n
     >>> top_submission_url_list = [submission.url for submission in top_submission_list]
 
 top_submission_url_list is a python list of strings, where each string represents a url for one of the top ten stories from r/TrueReddit.
+
+****************
+Create the epub
+****************
+Now that we have a list of url strings, we can use pypub to download the content and create an epub from the stories. First let's create an Epub object called epub. The only information we need to provide is the title of the ebook we'll be creating, which we will call 'TrueReddit - Top Stories'.
+    
+    >>> epub = pypub.Epub('TrueReddit - Top Stories')
+
+With the Epub object we just created, let's add a chapter to it for every story we in our url list.
+
+    >>> for url in url_list:
+            c = pypub.create_chapter_from_url(url)
+            epub.add_chapter
+   
+Finally, let's create our epub file. The below code saves it in the current working directory, but feel free to change that.
+    >>> epub.create_epub(os.getcwd())
+
+
