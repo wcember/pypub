@@ -5,6 +5,7 @@ Ready to get started? In this tutorial we will create an epub from the top stori
 
 Before you start, make sure the following is true
 
+- Confirm that python 2 is installed on your machine and that you are using is. As of this writing, pypub is not compatible with python 3.
 - Make sure the most recent version of `pypub <http://pypub.readthedocs.io/en/latest/pypub.html#installation>`_ is installed
 - In this tutorial, we are going to use the python package `praw <https://praw.readthedocs.io/en/stable/#installation>`_ to access reddit's api. Download that too. While praw is necessary for this tutorial, you do not need it to use pypub.
 - (Optional) If you want to read your ebook on kindle, you'll need to convert it to a mobi file. Download `KindleGen <http://www.amazon.com/gp/feature.html?docId=1000765211>`_ to do this.
@@ -43,15 +44,21 @@ Finally, let's create our epub file. The below code saves it in the current work
 
     >>> epub.create_epub(os.getcwd())
 
-At this point, in the directory you're working in, you should have a file *TrueReddit - Top Stories.epub`*. This is your ebook with the top stories from r/TrueReddit and you should be able to read on your favorite device (unless that device is a kindle...see the next section).
+At this point, in the directory you're working in, you should have a file *TrueReddit - Top Stories.epub*. This is your ebook with the top stories from r/TrueReddit and you should be able to read on your favorite device (unless that device is a kindle...see the next section).
 
 ****************
 (Optional) Convert to mobi
 ****************
 If you're like me, then you like reading things on your kindle (which is why I created pypub in the first place). Unfortunately, kindle uses it's own format for ebooks.
 
-Luckily, Amazon provided a tool, KindleGen to convert epubs (and other formats) to mobi so they can be viewed on kindle.
+Luckily, Amazon provided a tool, KindleGen to convert epubs (and other formats) to mobi so they can be viewed on kindle. Once it's downloaded, convert *TrueReddit - Top Stories.epub* by going to the command prompt and entering kindlegen's full file path (excluding .exe) followed by "TrueReddit - Top Stories.epub".
 
-First, copy the full path of the KindleGen executable installed. Alternatively, copy it over to the directory where 
+    > <full directory of kindlegen>kindlegen "TrueReddit - Top Stories.epub"
+    
+If the kindlegen executable is saved in the same directory as *TrueReddit - Top Stories.epub*, this can simply be entered as
+
+    > kindlegen "TrueReddit - Top Stories.epub"
+
+
 
 
