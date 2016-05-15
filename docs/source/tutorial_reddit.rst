@@ -39,7 +39,7 @@ With the Epub object we just created, let's add a chapter to it for every story 
 
     >>> for url in top_submission_url_list:
             c = pypub.create_chapter_from_url(url)
-            epub.add_chapter
+            epub.add_chapter(c)
    
 Finally, let's create our epub file. The below code saves it in the current working directory, but feel free to change that.
 
