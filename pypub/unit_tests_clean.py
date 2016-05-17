@@ -12,6 +12,31 @@ class CleanTests(unittest.TestCase):
     def test_condense(self):
         pass
 
+    def test_clean_empty_img(self):
+        s = u'''
+                <!DOCTYPE html>
+                <html>
+                 <head>
+                 </head>
+                 <body>
+                  <img src=""></img>
+                 </body>
+                </html>
+                '''
+        s1 = u'''
+                <!DOCTYPE html>
+                <html>
+                 <head>
+                 </head>
+                 <body>
+                  <img src=""></img>
+                  <img></img>
+                  <img/>
+                 </body>
+                </html>
+                '''
+        self.assertEqual(condense(clean(s1)), condense(clean(s)))
+
     def test_clean_tags_full_html(self):
         s = u'''
                 <!DOCTYPE html>

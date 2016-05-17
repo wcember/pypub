@@ -103,7 +103,7 @@ def _replace_image(image_url, image_tag, ebook_folder,
                                      image_name)
         image_tag['src'] = 'images' + '/' + image_name + '.' + image_extension
     except ImageErrorException:
-        image_tag.extract()
+        image_tag.decompose()
     except AssertionError:
         raise ValueError('%s doesn\'t exist or doesn\'t contain a subdirectory images' % ebook_folder)
 

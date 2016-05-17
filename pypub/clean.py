@@ -48,7 +48,14 @@ def clean(input_string,
                 if attribute not in tag_dictionary[current_node.name]:
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
-    unformatted_html_unicode_string = unicode(root.prettify(encoding='utf-8', formatter=EntitySubstitution.substitute_html), encoding = 'utf-8')
+    #Remove img tags without src attribute
+    image_node_list = root.find_all('img')
+    for node in image_node_list:
+        if not node.has_attr('src'):
+            node.extract()
+    unformatted_html_unicode_string = unicode(root.prettify(encoding='utf-8',
+                                                            formatter=EntitySubstitution.substitute_html),
+                                              encoding='utf-8')
     #fix <br> tags since not handled well by default by bs4
     unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
     #remove &nbsp; and replace with space since not handled well by certain e-readers
