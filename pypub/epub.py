@@ -198,7 +198,8 @@ class Epub(object):
     def _create_directories(self, epub_dir=None):
         if epub_dir is None:
             self.EPUB_DIR = tempfile.mkdtemp()
-        else: self.EPUB_DIR = epub_dir
+        else:
+            self.EPUB_DIR = epub_dir
         self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
         self.META_INF_DIR = os.path.join(self.EPUB_DIR, 'META-INF')
         self.LOCAL_IMAGE_DIR = 'images'

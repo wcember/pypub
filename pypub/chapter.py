@@ -68,7 +68,7 @@ def save_image(image_url, image_directory, image_name):
             requests_object = requests.get(image_url, headers=request_headers)
             try:
                 content = requests_object.content
-                #Check for empty response
+                # Check for empty response
                 f.write(content)
             except AttributeError:
                 raise ImageErrorException(image_url)
