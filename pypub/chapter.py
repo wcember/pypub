@@ -106,6 +106,8 @@ def _replace_image(image_url, image_tag, ebook_folder,
         image_tag.decompose()
     except AssertionError:
         raise ValueError('%s doesn\'t exist or doesn\'t contain a subdirectory images' % ebook_folder)
+    except TypeError:
+        image_tag.decompose()
 
 
 class Chapter(object):
