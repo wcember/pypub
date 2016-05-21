@@ -1,9 +1,36 @@
 import re
 
+import bs4
+
 from bs4 import BeautifulSoup
 from bs4.dammit import EntitySubstitution
 
 import constants
+
+
+def create_html_from_fragment(tag):
+    """
+    Creates full html tree from a fragment. Assumes that tag should be wrapped in a body and is currently not
+
+    Args:
+        tag: a bs4.element.Tag
+
+    Returns:"
+        bs4.element.Tag: A bs4 tag representing a full html document
+    """
+
+    try:
+        assert isinstance(tag, bs4.element.Tag)
+    except AssertionError:
+        raise TypeError
+    try:
+        assert tag.find_all('body') == []
+    except AssertionError:
+        raise ValueError
+
+    soup = BeautifulSoup('<html><head></head><body></body></html>', 'html.parser')
+    soup.body.append(tag)
+    return soup
 
 
 def clean(input_string,
@@ -33,6 +60,9 @@ def clean(input_string,
     except AssertionError:
         raise TypeError
     root = BeautifulSoup(input_string, 'html.parser')
+    article_tag = root.find_all('article')
+    if article_tag:
+        root = article_tag[0]
     stack = root.findAll(True, recursive=False)
     while stack:
         current_node = stack.pop()
@@ -48,6 +78,9 @@ def clean(input_string,
                 if attribute not in tag_dictionary[current_node.name]:
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
+    #wrap partial tree if necessary
+    if root.find_all('html') == []:
+        root = create_html_from_fragment(root)
     # Remove img tags without src attribute
     image_node_list = root.find_all('img')
     for node in image_node_list:
