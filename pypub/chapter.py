@@ -233,7 +233,7 @@ class ChapterFactory(object):
             ValueError: Raised if unable to connect to url supplied
         """
         try:
-            request_object = requests.get(url, headers=self.request_headers)
+            request_object = requests.get(url, headers=self.request_headers, allow_redirects=False)
         except (requests.exceptions.MissingSchema,
                 requests.exceptions.ConnectionError):
             raise ValueError("%s is an invalid url or no network connection" % url)
