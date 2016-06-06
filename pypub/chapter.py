@@ -290,8 +290,11 @@ class ChapterFactory(object):
             try:
                 root = BeautifulSoup(html_string, 'html.parser')
                 title_node = root.title
-                title = unicode(title_node.string)
-            except IndexError:
+                if title_node is not None:
+                    title = unicode(title_node.string)
+                else:
+                    raise ValueError
+            except (IndexError, ValueError):
                 title = 'Ebook Chapter'
         return Chapter(clean_xhtml_string, title, url)
 
