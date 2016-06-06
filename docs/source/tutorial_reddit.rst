@@ -38,8 +38,13 @@ Now that we have a list of url strings, we can use pypub to download the content
 With the Epub object we just created, let's add a chapter to it for every story we in our url list.
 
     >>> for url in top_submission_url_list:
-    ...     c = pypub.create_chapter_from_url(url)
-    ...     epub.add_chapter(c)
+    ...     try:
+    ...         c = pypub.create_chapter_from_url(url)
+    ...         epub.add_chapter(c)
+    ...     except ValueError:
+    ...         pass
+
+Note in the above code that we try to create a chapter from every url, but don't if pypub raises a ValueError, which occurs if you try using pypub without an internet connection or if the url is invalid.
    
 Finally, let's create our epub file. The below code saves it in the current working directory, but feel free to change that.
 
@@ -62,4 +67,4 @@ If the kindlegen executable is saved in the same directory as *TrueReddit - Top 
 
 .. rubric:: Footnotes
 
-.. [#f1] If you are using a version of python earlier than 2.7.9, you may get SNIMissingWarning exception. You can safely ignore this.
+.. [#f1] If you are using a version of python earlier than 2.7.9, you may get SNIMissingWarning exception, which has to do with verifying HTTPS certificates. You should consider upgrading your version of python or following the instructions `here <http://urllib3.readthedocs.io/en/latest/security.html#snimissingwarning>`
