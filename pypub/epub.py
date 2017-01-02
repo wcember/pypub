@@ -258,6 +258,7 @@ class Epub(object):
                 raise TypeError('epub_name must be string or None')
             if epub_name is None:
                 epub_name = self.title
+            epub_name = ''.join([c for c in epub_name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
             epub_name_with_path = os.path.join(output_directory, epub_name)
             try:
                 os.remove(os.path.join(epub_name_with_path, '.zip'))
