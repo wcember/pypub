@@ -12,7 +12,7 @@ pypub\unit_tests_clean.py
 pypub\unit_tests_epub.py
 pypub\unit_tests_image.py
 pypub\epub_templates\container.xml
-pypub\epub_templates\minetype.txt
+pypub\epub_templates\mimetype
 pypub\epub_templates\opf.xml
 pypub\epub_templates\toc.html
 pypub\epub_templates\toc_ncx.xml
