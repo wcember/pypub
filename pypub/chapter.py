@@ -119,7 +119,7 @@ def _replace_image(image_url, image_tag, ebook_folder,
 class Chapter(object):
     """
     Class representing an ebook chapter. By and large this shouldn't be
-    called directly but rather one should use the class ChapterFactor to
+    called directly but rather one should use the class ChapterFactory to
     instantiate a chapter.
 
     Args:
