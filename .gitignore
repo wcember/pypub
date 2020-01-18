@@ -24,7 +24,7 @@ var/
 .installed.cfg
 *.egg
 
-# Installer logs
+# Installer
 pip-log.txt
 pip-delete-this-directory.txt
 
@@ -42,6 +42,10 @@ coverage.xml
 
 # Django stuff:
 *.log
+
+#Virtual env
+venv/
+venv27/
 
 # Sphinx documentation
 docs/build/
