@@ -12,10 +12,7 @@ class ChapterTests(unittest.TestCase):
 
     def setUp(self):
         self.factory = chapter.ChapterFactory()
-        self.test_image_list = ['http://williamcember.com/media/bithex-logo-black.png',
-                                'http://williamcember.com/media/icon_linkedin.png',
-                                'http://williamcember.com/media/GitHub-Mark-Light-120px-plus.png',
-                                'http://williamcember.com/media/icon_twitter.png']
+        self.test_image_list = []
 
     def test_save_image(self):
         image_url_list = ['http://www.fangraphs.com/images/247_90_fangraphs.png',
