@@ -34,7 +34,7 @@ Documentation is available at [http://pypub.readthedocs.org/en/latest/developer_
 
 # Copyright and License #
 
-Copyright (c) 2016 William Cember
+Copyright (c) 2020 William Cember
 
 [**Licensed**](https://github.com/wcember/pypub/blob/master/LICENSE) under the MIT License
 
