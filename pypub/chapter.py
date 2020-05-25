@@ -1,4 +1,4 @@
-import cgi
+import html
 import codecs
 import imghdr
 import os
@@ -39,8 +39,13 @@ def get_image_type(url):
             urllib.request.urlretrieve(url, temp_file_name)
             image_type = imghdr.what(temp_file_name)
             return image_type
-        except IOError:
+        except Exception:
             return None
+        finally:
+            try:
+                f.close()
+            except:
+                pass
 
 
 def save_image(image_url, image_directory, image_name):
@@ -143,7 +148,7 @@ class Chapter(object):
         self.content = content
         self._content_tree = BeautifulSoup(self.content, 'html.parser')
         self.url = url
-        self.html_title = cgi.escape(self.title, quote=True)
+        self.html_title = html.escape(self.title, quote=True)
 
     def write(self, file_name):
         """

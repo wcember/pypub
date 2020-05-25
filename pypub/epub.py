@@ -1,17 +1,16 @@
 import collections
-import imp
+import importlib
 import random
-import string
 import shutil
+import string
 import tempfile
 import time
 
 import jinja2
-import requests
 import requests.packages.urllib3
 
 try:
-    imp.find_module('lxml')
+    importlib.import_module('lxml')
     lxml_module_exists = True
     import lxml.etree
     import lxml.html
