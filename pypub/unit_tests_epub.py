@@ -6,9 +6,9 @@ import shutil
 import tempfile
 import time
 
-import chapter
-from constants import *
-import epub
+from . import chapter
+from .constants import *
+from . import epub
 
 
 class TestEpub(unittest.TestCase):
@@ -24,10 +24,10 @@ class TestEpub(unittest.TestCase):
             c = chapter_factory.create_chapter_from_file(full_name)
             self.chapter_list.append(c)
         self.chapter_titles = [
-                u'Quick Practical, Tactical Tips for Presentations',
-                u'Venture capital - Wikipedia, the free encyclopedia',
-                u"Ben's Blog",
-                u"The capture of Mosul: Terror\u2019s new headquarters | The Economist",
+                'Quick Practical, Tactical Tips for Presentations',
+                'Venture capital - Wikipedia, the free encyclopedia',
+                "Ben's Blog",
+                "The capture of Mosul: Terror\u2019s new headquarters | The Economist",
                 ]
 
     def test_TOCHTML(self):

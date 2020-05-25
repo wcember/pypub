@@ -4,8 +4,8 @@ import imghdr
 import os
 import shutil
 import tempfile
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import uuid
 
 import bs4
@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from bs4.dammit import EntitySubstitution
 import requests
 
-import clean
+from . import clean
 
 
 class NoUrlError(Exception):
@@ -36,7 +36,7 @@ def get_image_type(url):
     else:
         try:
             f, temp_file_name = tempfile.mkstemp()
-            urllib.urlretrieve(url, temp_file_name)
+            urllib.request.urlretrieve(url, temp_file_name)
             image_type = imghdr.what(temp_file_name)
             return image_type
         except IOError:
@@ -161,11 +161,11 @@ class Chapter(object):
 
     def _validate_input_types(self, content, title):
         try:
-            assert isinstance(content, basestring)
+            assert isinstance(content, str)
         except AssertionError:
             raise TypeError('content must be a string')
         try:
-            assert isinstance(title, basestring)
+            assert isinstance(title, str)
         except AssertionError:
             raise TypeError('title must be a string')
         try:
@@ -186,15 +186,15 @@ class Chapter(object):
     def _get_image_urls(self):
         image_nodes = self._content_tree.find_all('img')
         raw_image_urls = [node['src'] for node in image_nodes if node.has_attr('src')]
-        full_image_urls = [urlparse.urljoin(self.url, image_url) for image_url in raw_image_urls]
+        full_image_urls = [urllib.parse.urljoin(self.url, image_url) for image_url in raw_image_urls]
         image_nodes_filtered = [node for node in image_nodes if node.has_attr('src')]
-        return zip(image_nodes_filtered, full_image_urls)
+        return list(zip(image_nodes_filtered, full_image_urls))
 
     def _replace_images_in_chapter(self, ebook_folder):
         image_url_list = self._get_image_urls()
         for image_tag, image_url in image_url_list:
             _replace_image(image_url, image_tag, ebook_folder)
-        unformatted_html_unicode_string = unicode(self._content_tree.prettify(encoding='utf-8',
+        unformatted_html_unicode_string = str(self._content_tree.prettify(encoding='utf-8',
                                                                               formatter=EntitySubstitution.substitute_html),
                                                   encoding='utf-8')
         unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
@@ -297,7 +297,7 @@ class ChapterFactory(object):
                 root = BeautifulSoup(html_string, 'html.parser')
                 title_node = root.title
                 if title_node is not None:
-                    title = unicode(title_node.string)
+                    title = str(title_node.string)
                 else:
                     raise ValueError
             except (IndexError, ValueError):

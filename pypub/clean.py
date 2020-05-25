@@ -5,7 +5,7 @@ import bs4
 from bs4 import BeautifulSoup
 from bs4.dammit import EntitySubstitution
 
-import constants
+from . import constants
 
 
 def create_html_from_fragment(tag):
@@ -56,7 +56,7 @@ def clean(input_string,
         TypeError: Raised if input_string isn't a unicode string or string.
     """
     try:
-        assert isinstance(input_string, basestring)
+        assert isinstance(input_string, str)
     except AssertionError:
         raise TypeError
     root = BeautifulSoup(input_string, 'html.parser')
@@ -67,14 +67,14 @@ def clean(input_string,
     while stack:
         current_node = stack.pop()
         child_node_list = current_node.findAll(True, recursive=False)
-        if current_node.name not in tag_dictionary.keys():
+        if current_node.name not in list(tag_dictionary.keys()):
             parent_node = current_node.parent
             current_node.extract()
             for n in child_node_list:
                 parent_node.append(n)
         else:
             attribute_dict = current_node.attrs
-            for attribute in attribute_dict.keys():
+            for attribute in list(attribute_dict.keys()):
                 if attribute not in tag_dictionary[current_node.name]:
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
@@ -86,7 +86,7 @@ def clean(input_string,
     for node in image_node_list:
         if not node.has_attr('src'):
             node.extract()
-    unformatted_html_unicode_string = unicode(root.prettify(encoding='utf-8',
+    unformatted_html_unicode_string = str(root.prettify(encoding='utf-8',
                                                             formatter=EntitySubstitution.substitute_html),
                                               encoding='utf-8')
     # fix <br> tags since not handled well by default by bs4
@@ -110,7 +110,7 @@ def condense(input_string):
         TypeError: Raised if input_string isn't a unicode string or string.
     """
     try:
-        assert isinstance(input_string, basestring)
+        assert isinstance(input_string, str)
     except AssertionError:
         raise TypeError
     removed_leading_whitespace = re.sub('>\s+', '>', input_string).strip()
@@ -132,7 +132,7 @@ def html_to_xhtml(html_unicode_string):
         TypeError: Raised if input_string isn't a unicode string or string.
     """
     try:
-        assert isinstance(html_unicode_string, basestring)
+        assert isinstance(html_unicode_string, str)
     except AssertionError:
         raise TypeError
     root = BeautifulSoup(html_unicode_string, 'html.parser')
@@ -141,10 +141,10 @@ def html_to_xhtml(html_unicode_string):
         assert root.html is not None
     except AssertionError:
         raise ValueError(''.join(['html_unicode_string cannot be a fragment.',
-                         'string is the following: %s', unicode(root)]))
+                         'string is the following: %s', str(root)]))
     # Add xmlns attribute to html node
     root.html['xmlns'] = 'http://www.w3.org/1999/xhtml'
-    unicode_string = unicode(root.prettify(encoding='utf-8', formatter='html'), encoding='utf-8')
+    unicode_string = str(root.prettify(encoding='utf-8', formatter='html'), encoding='utf-8')
     # Close singleton tag_dictionary
     for tag in constants.SINGLETON_TAG_LIST:
         unicode_string = unicode_string.replace(

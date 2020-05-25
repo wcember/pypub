@@ -4,7 +4,7 @@ import unittest
 
 from bs4 import BeautifulSoup
 
-from clean import clean, condense, create_html_from_fragment, html_to_xhtml
+from .clean import clean, condense, create_html_from_fragment, html_to_xhtml
 
 
 class CleanTests(unittest.TestCase):
@@ -15,7 +15,7 @@ class CleanTests(unittest.TestCase):
         pass
 
     def test_clean_empty_img(self):
-        s = u'''
+        s = '''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -25,7 +25,7 @@ class CleanTests(unittest.TestCase):
                  </body>
                 </html>
                 '''
-        s1 = u'''
+        s1 = '''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -48,7 +48,7 @@ class CleanTests(unittest.TestCase):
         self.assertEqual(condense(clean(s2)), condense(s))
 
     def test_clean_tags_full_html(self):
-        s = u'''
+        s = '''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -58,7 +58,7 @@ class CleanTests(unittest.TestCase):
                  </body>
                 </html>
                 '''
-        s1 = u'''
+        s1 = '''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -69,7 +69,7 @@ class CleanTests(unittest.TestCase):
                  </body>
                 </html>
                 '''
-        s2 = u'''
+        s2 = '''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -80,7 +80,7 @@ class CleanTests(unittest.TestCase):
                  <script>Uh oh...it's an evil script again!</script>
                 </html>
                 '''
-        s3 = u'''
+        s3 = '''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -91,7 +91,7 @@ class CleanTests(unittest.TestCase):
                  <video>Play me!</video>
                 </html>
                 '''
-        s4 = u'''
+        s4 = '''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -105,7 +105,7 @@ class CleanTests(unittest.TestCase):
                 </html>
                 '''
 
-        s5 = u'''
+        s5 = '''
         <!DOCTYPE html>
         <html>
          <head>
@@ -126,8 +126,8 @@ class CleanTests(unittest.TestCase):
         self.assertEqual(condense(clean(s5)), condense(s))
 
     def test_html_to_xhtml(self):
-        s = u'<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><div id="Test">Hello</div><br /><br /></body></html>'
-        s1 = u'''
+        s = '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><div id="Test">Hello</div><br /><br /></body></html>'
+        s1 = '''
                 <!DOCTYPE html>
                 <html>
                  <head>
@@ -144,7 +144,7 @@ class CleanTests(unittest.TestCase):
     def test_create_html_from_fragment(self):
         test_tag1 = BeautifulSoup('<div></div>', 'html.parser').div
         test_tree1 = create_html_from_fragment(test_tag1)
-        self.assertEqual(unicode(test_tree1), '<html><head></head><body><div></div></body></html>')
+        self.assertEqual(str(test_tree1), '<html><head></head><body><div></div></body></html>')
         self.assertRaises(TypeError, create_html_from_fragment, '')
         self.assertRaises(ValueError, create_html_from_fragment, test_tree1)
 

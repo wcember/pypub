@@ -1,10 +1,10 @@
 import cProfile
 import pstats
 
-import epub
-import chapter
+from . import epub
+from . import chapter
 
-from constants import *
+from .constants import *
 
 
 def create_test_epub():
