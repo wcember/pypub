@@ -34,18 +34,20 @@ def get_image_type(url):
         if url.endswith(ending):
             return ending
     else:
+        image_type = None
         try:
-            f, temp_file_name = tempfile.mkstemp()
-            urllib.request.urlretrieve(url, temp_file_name)
-            image_type = imghdr.what(temp_file_name)
+            fd, temp_file_name = tempfile.mkstemp(prefix="pypub-image-")
+            try:
+                urllib.request.urlretrieve(url, temp_file_name)
+                image_type = imghdr.what(temp_file_name)
+            except Exception:
+                pass
+            os.close(fd)
+            os.remove(temp_file_name)
             return image_type
         except Exception:
             return None
-        finally:
-            try:
-                f.close()
-            except:
-                pass
+
 
 
 def save_image(image_url, image_directory, image_name):

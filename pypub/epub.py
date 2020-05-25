@@ -196,7 +196,7 @@ class Epub(object):
 
     def _create_directories(self, epub_dir=None):
         if epub_dir is None:
-            self.EPUB_DIR = tempfile.mkdtemp()
+            self.EPUB_DIR = tempfile.mkdtemp(prefix="pypub-epub-")
         else:
             self.EPUB_DIR = epub_dir
         self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
@@ -272,8 +272,9 @@ class Epub(object):
                 os.remove(epub_full_name)
             except OSError:
                 pass
-            os.rename(zip_archive, epub_full_name)
+            shutil.move(zip_archive, epub_full_name)
             return epub_full_name
         createTOCs_and_ContentOPF()
         epub_path = turn_zip_into_epub(create_zip_archive(epub_name))
+        shutil.rmtree(self.EPUB_DIR,ignore_errors=True)
         return epub_path
