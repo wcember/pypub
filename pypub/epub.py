@@ -1,17 +1,16 @@
 import collections
-import imp
+import importlib
 import random
-import string
 import shutil
+import string
 import tempfile
 import time
 
 import jinja2
-import requests
 import requests.packages.urllib3
 
 try:
-    imp.find_module('lxml')
+    importlib.import_module('lxml')
     lxml_module_exists = True
     import lxml.etree
     import lxml.html
@@ -19,8 +18,8 @@ try:
 except ImportError:
     lxml_module_exists = False
 
-from constants import *
-import chapter
+from .constants import *
+from . import chapter
 
 requests.packages.urllib3.disable_warnings()
 
@@ -44,7 +43,7 @@ class _ContainerFile(object):
 class _EpubFile(object):
 
     def __init__(self, template_file, **non_chapter_parameters):
-        self.content = u''
+        self.content = ''
         self.file_name = ''
         self.template_file = template_file
         self.non_chapter_parameters = non_chapter_parameters
@@ -57,7 +56,7 @@ class _EpubFile(object):
     def _render_template(self, **variable_value_pairs):
         def read_template():
             with open(self.template_file, 'r') as f:
-                template = f.read().decode('utf-8')
+                template = f.read()  
             return jinja2.Template(template)
         template = read_template()
         rendered_template = template.render(variable_value_pairs)
@@ -66,7 +65,7 @@ class _EpubFile(object):
     def add_chapters(self, **parameter_lists):
         def check_list_lengths(lists):
             list_length = None
-            for value in lists.values():
+            for value in list(lists.values()):
                 assert isinstance(value, list)
                 if list_length is None:
                     list_length = len(value)
@@ -74,8 +73,8 @@ class _EpubFile(object):
                     assert len(value) == list_length
         check_list_lengths(parameter_lists)
         template_chapter = collections.namedtuple('template_chapter',
-                                                  parameter_lists.keys())
-        chapters = [template_chapter(*items) for items in zip(*parameter_lists.values())]
+                                                  list(parameter_lists.keys()))
+        chapters = [template_chapter(*items) for items in zip(*list(parameter_lists.values()))]
         self._render_template(chapters=chapters, **self.non_chapter_parameters)
 
     def get_content(self):
@@ -88,7 +87,7 @@ class TocHtml(_EpubFile):
         super(TocHtml, self).__init__(template_file, **non_chapter_parameters)
 
     def add_chapters(self, chapter_list):
-        chapter_numbers = range(len(chapter_list))
+        chapter_numbers = list(range(len(chapter_list)))
         link_list = [str(n) + '.xhtml' for n in chapter_numbers]
         try:
             for c in chapter_list:
@@ -117,7 +116,7 @@ class TocNcx(_EpubFile):
         super(TocNcx, self).__init__(template_file, **non_chapter_parameters)
 
     def add_chapters(self, chapter_list):
-        id_list = range(len(chapter_list))
+        id_list = list(range(len(chapter_list)))
         play_order_list = [n + 1 for n in id_list]
         title_list = [c.title for c in chapter_list]
         link_list = [str(n) + '.xhtml' for n in id_list]
@@ -147,7 +146,7 @@ class ContentOpf(_EpubFile):
                                          date=date)
 
     def add_chapters(self, chapter_list):
-        id_list = range(len(chapter_list))
+        id_list = list(range(len(chapter_list)))
         link_list = [str(n) + '.xhtml' for n in id_list]
         super(ContentOpf, self).add_chapters(**{'id': id_list, 'link': link_list})
 
@@ -197,7 +196,7 @@ class Epub(object):
 
     def _create_directories(self, epub_dir=None):
         if epub_dir is None:
-            self.EPUB_DIR = tempfile.mkdtemp()
+            self.EPUB_DIR = tempfile.mkdtemp(prefix="pypub-epub-")
         else:
             self.EPUB_DIR = epub_dir
         self.OEBPS_DIR = os.path.join(self.EPUB_DIR, 'OEBPS')
@@ -253,7 +252,7 @@ class Epub(object):
 
         def create_zip_archive(epub_name):
             try:
-                assert isinstance(epub_name, basestring) or epub_name is None
+                assert isinstance(epub_name, str) or epub_name is None
             except AssertionError:
                 raise TypeError('epub_name must be string or None')
             if epub_name is None:
@@ -273,8 +272,9 @@ class Epub(object):
                 os.remove(epub_full_name)
             except OSError:
                 pass
-            os.rename(zip_archive, epub_full_name)
+            shutil.move(zip_archive, epub_full_name)
             return epub_full_name
         createTOCs_and_ContentOPF()
         epub_path = turn_zip_into_epub(create_zip_archive(epub_name))
+        shutil.rmtree(self.EPUB_DIR,ignore_errors=True)
         return epub_path

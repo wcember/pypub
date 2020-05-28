@@ -1,7 +1,7 @@
 import os
 import unittest
 
-import chapter
+from . import chapter
 
 
 test_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),

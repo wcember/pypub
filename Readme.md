@@ -1,5 +1,9 @@
 # Pypub #
 
+This is a python 3 version of original pypub
+https://github.com/wcember/pypub
+
+
 Create epub's using python. Pypub is a python library to create epub files quickly without having to worry about the intricacies of the epub specification.
 
 # Installation #
@@ -7,7 +11,7 @@ The current release of pypub is available through pip:
 
     $ pip install pypub
 
-Pypub is currently only compatible with Python 2.
+__Pypub is currently only compatible with Python 3__
 
 # Quickstart #
 
