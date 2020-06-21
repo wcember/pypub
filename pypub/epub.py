@@ -2,12 +2,12 @@
 epub object defintion and script
 """
 import os
-import random
+import uuid
 import shutil
-import string
 import zipfile
 import tempfile
 from typing import Optional
+from datetime import datetime
 
 from .const import *
 from .chapter import Chapter
@@ -26,6 +26,7 @@ class Epub:
         language:  str = 'en',
         rights:    str = '',
         publisher: str = 'pypub',
+        date:      Optional[str] = None,
         cover:     Optional[str] = None,
         epub_dir:  Optional[str] = None,
     ):
@@ -40,12 +41,14 @@ class Epub:
         """
         validate('title', title, str)
         # primary attributes
+        dt   = datetime.today()
         self.title       = title
         self.creator     = creator
         self.language    = language
         self.rights      = rights
         self.publisher   = publisher
-        self.uid         = random.choices(string.ascii_uppercase + string.digits, k=12)
+        self.date        = date or datetime(dt.year, dt.month, dt.day).isoformat()
+        self.uid         = uuid.uuid4()
         self.cover_image = cover or os.path.join(LOCAL_DIR, 'static/cover.png')
         # trackers
         self.chapter_id = 0
@@ -98,12 +101,9 @@ class Epub:
             with open(os.path.join(self.OEBPS_DIR, chapter.link), 'wb') as f:
                 f.write(content)
         # update epub-vars with trackers for style files and image files
-        epub_vars['styles'] = [
-            (n, os.path.join('styles/', s))
-            for n, s in enumerate(os.listdir(self.STYLE_DIR), 0)
-        ]
+        epub_vars['styles'] = enumerate(os.listdir(self.STYLE_DIR), 0)
         epub_vars['images'] = [
-            (i.rsplit('.', 1)[-1], os.path.join('images', i))
+            (i.rsplit('.', 1)[-1], i)
             for i in os.listdir(self.IMAGE_DIR)
         ]
         log.info('epub=%r, writing final templates' % self.title)

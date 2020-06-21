@@ -132,15 +132,17 @@ class Chapter:
         self.url        = url
         self.html_title = html.escape(title)
         # additional attributes filled out by epub
-        self.id    = None
-        self.link  = None
-        self.etree = None
+        self.id         = None
+        self.link       = None
+        self.play_order = None
+        self.etree      = None
 
     def _assign(self, id: int, link: str):
         """assign addtional epub specific attributes"""
-        self.id    = 'page_%d' % id
-        self.link  = link
-        self.etree = self._new_etree()
+        self.id         = 'page_%d' % id
+        self.link       = link
+        self.play_order = id
+        self.etree      = self._new_etree()
 
     def _new_etree(self) -> Optional[lxml.html.HtmlElement]:
         """generate new filtered element-tree"""
@@ -207,7 +209,7 @@ class Chapter:
             finally:
                 if fname:
                     _downloads.add(url)
-                    img.attrib['src'] = os.path.join('images/', fname)
+                    img.attrib['src'] = fname
                 if file:
                     file.close()
 
