@@ -1,6 +1,6 @@
 
 pypub: Create epub files easily with python
-==================================
+============================================
 
 Contents:
 
@@ -19,4 +19,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
