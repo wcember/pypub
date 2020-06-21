@@ -1,6 +1,7 @@
 """
 contains chapter object and chapter generating utilities
 """
+import os
 import html
 import uuid
 import imghdr
@@ -10,7 +11,7 @@ import urllib.parse
 from jinja2 import Template
 from typing import Optional
 
-from .const import validate, xmlprettify, SUPPORTED_TAGS
+from .const import log, validate, xmlprettify, SUPPORTED_TAGS
 
 #** Variables **#
 __all__ = [
@@ -177,12 +178,18 @@ class Chapter:
 
     def _replace_images(self, image_dir: str):
         """replace image references w/ local downloaded ones"""
+        _downloads = set()
         for img in self.etree.xpath('.//img[@src]'):
             # get full link for relative paths
-            url   = urllib.parse(self.url, img.attrib['src'])
+            link = img.attrib['src'].rsplit('?', 1)[0]
+            url  = urllib.parse.urljoin(self.url, link)
+            # skip already completed downloads
+            if url in _downloads:
+                continue
             # attempt to download from url
-            (head, fname, file) = (False, None, None)
+            (head, fname, file) = (True, None, None)
             try:
+                log.debug('chapter[%s] download img: %s' % (self.title, url))
                 with _session.get(url, timeout=10, stream=True) as r:
                     r.raise_for_status()
                     for chunk in r.iter_content(chunk_size=8192):
@@ -199,6 +206,7 @@ class Chapter:
                         file.write(chunk)
             finally:
                 if fname:
+                    _downloads.add(url)
                     img.attrib['src'] = os.path.join('images/', fname)
                 if file:
                     file.close()
@@ -206,7 +214,7 @@ class Chapter:
     def _render(self, template: Template, image_dir: str, **kw: str) -> bytes:
         """render chapter content and attach it to the template"""
         # replace images in etree
-        # self._replace_images(image_dir)
+        self._replace_images(image_dir)
         # render template and xml tree to attach elements to
         content = template.render(**kw, chapter=vars(self))
         etree   = lxml.html.fromstring(content.encode())

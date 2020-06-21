@@ -1,4 +1,5 @@
 """
+epub object defintion and script
 """
 import os
 import random
@@ -75,10 +76,12 @@ class Epub:
     def _generate(self):
         """generate the epub directory before compiling epub"""
         # make directories
+        log.info('generating: %r (by: %s)' % (self.title, self.creator))
         os.makedirs(self.META_INF_DIR)
         os.makedirs(self.IMAGE_DIR)
         os.makedirs(self.STYLE_DIR)
         # write static-files
+        log.info('epub=%r, generating static content' % self.title)
         copy_file('static/mimetype',          self.EPUB_DIR)
         copy_file('static/container.xml',     self.META_INF_DIR)
         copy_file('static/coverpage.xhtml',   self.OEBPS_DIR)
@@ -86,9 +89,11 @@ class Epub:
         copy_file('static/css/coverpage.css', self.STYLE_DIR)
         copy_file('static/css/styles.css',    self.STYLE_DIR)
         # get vars and start writing chapters
+        log.info('epub=%r, writing chapter content' % self.title)
         epub_vars = vars(self)
         page_html = read_template('templates/page.xhtml.xml.j2')
-        for chapter in self.chapters:
+        for n, chapter in enumerate(self.chapters, 1):
+            log.info('rendering chapter #%d: %r' % (n, chapter.title))
             content = chapter._render(page_html, self.IMAGE_DIR, epub=epub_vars)
             with open(os.path.join(self.OEBPS_DIR, chapter.link), 'wb') as f:
                 f.write(content)
@@ -101,6 +106,7 @@ class Epub:
             (i.rsplit('.', 1)[-1], os.path.join('images', i))
             for i in os.listdir(self.IMAGE_DIR)
         ]
+        log.info('epub=%r, writing final templates' % self.title)
         # render and write the rest of the templates
         render_template('templates/book.ncx.xml.j2', self.OEBPS_DIR, epub_vars)
         render_template('templates/book.opf.xml.j2', self.OEBPS_DIR, epub_vars)
@@ -120,6 +126,7 @@ class Epub:
             # generate epub directory
             self._generate()
             # start zipping contents
+            log.info('epub=%r, zipping content' % self.title)
             zipf = zipfile.ZipFile(fzip, 'w', zipfile.ZIP_DEFLATED)
             path = self.EPUB_DIR.rstrip('/') + '/'
             for root, dirs, files in os.walk(path):
