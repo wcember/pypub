@@ -209,7 +209,7 @@ class Chapter:
             finally:
                 if fname:
                     _downloads.add(url)
-                    img.attrib['src'] = fname
+                    img.attrib['src'] = os.path.join('images/', fname)
                 if file:
                     file.close()
 
