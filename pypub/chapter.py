@@ -49,7 +49,7 @@ def create_chapter_from_string(
     etree = None
     # attempt to parse title if not given
     if not title:
-        etree  = etree or lxml.html.fromstring(html)
+        etree  = etree if etree is not None else lxml.html.fromstring(html)
         xpath  = (title_xpath or './/title').rsplit('text()', 1)[0] + '/text()'
         elem   = etree.xpath(xpath)
         # raise error if title-xpath failed
@@ -59,20 +59,20 @@ def create_chapter_from_string(
         title  = elem[0] if elem else 'Epub Chapter'
     # attempt to parse content if given xml-path
     if content_xpath:
-        etree = etree or lxml.html.fromstring(html)
+        etree = etree if etree is not None else lxml.html.fromstring(html)
         elem  = etree.xpath(content_xpath)
         # if no elements are found, raise error
         if len(elem) == 0:
             raise ValueError('no content w/ xpath: %s' % content_xpath)
         # if one element is found, set as root
         if len(elem) == 1:
-            html = lxml.html.tostring(elem[0])
+            html = lxml.html.tostring(elem[0]).decode()
         # if multiple elements were found, append all to new root
         else:
             etree = lxml.html.fromstring('<div></div>')
             for child in elem:
                 etree.append(child)
-            html = lxml.html.tostring(etree)
+            html = lxml.html.tostring(etree).decode()
     # generate chapter object
     return Chapter(title, html, url)
 
