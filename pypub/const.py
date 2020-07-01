@@ -7,8 +7,6 @@ import jinja2
 import logging
 import lxml.html
 
-# :(
-
 #** Variables **#
 __all__ = [
     'VERSION',
@@ -149,11 +147,11 @@ def xmlprettify(elem: lxml.html.HtmlElement, chars: str='  ', _level: int=1):
         for child in children:
             xmlprettify(child, chars, _level + 1)
         # ensure last child has tail indentation of parent
-        child.tail = end
+        child.tail = (child.tail or '').strip() + end
     else:
         elem.text = '' if not elem.text else elem.text.strip()
         if elem.tail:
-            elem.tail = end
+            elem.tail = (elem.tail or '').strip() + end
 
 #** Init **#
 log = _make_logger()
