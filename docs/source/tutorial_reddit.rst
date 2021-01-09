@@ -5,7 +5,7 @@ Ready to get started? In this tutorial we will create an epub from the top stori
 
 Before you start, make sure the following is true
 
-- Confirm that python 2 is installed on your machine and that you are using is. As of this writing, pypub is not compatible with python 3.
+- Confirm that python 3 is installed on your machine and that you are using is.
 - Make sure the most recent version of `pypub <http://pypub.readthedocs.io/en/latest/pypub.html#installation>`_ is installed
 - In this tutorial, we are going to use the python package `praw <https://praw.readthedocs.io/en/stable/#installation>`_ to access reddit's api. Download that too. While praw is necessary for this tutorial, you do not need it to use pypub.
 - (Optional) If you want to read your ebook on kindle, you'll need to convert it to a mobi file. Download `KindleGen <http://www.amazon.com/gp/feature.html?docId=1000765211>`_ to do this.
