@@ -23,11 +23,11 @@ class EpubTests(unittest.TestCase):
 
     def _walk(self, path: str) -> List[str]:
         """generate a list of files included in tree"""
-        tree = []
+        tree = set()
         for root, dirs, files in os.walk(path):
             fpath = root.split(path, 1)[1]
             for file in files:
-                tree.append( os.path.join(fpath, file) )
+                tree.add(os.path.join(fpath, file))
         return tree
 
     def test_create_epub(self):
