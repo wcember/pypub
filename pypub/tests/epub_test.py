@@ -34,8 +34,8 @@ class EpubTests(unittest.TestCase):
         """generate an epub directory-tree ready for zipping"""
         try:
             self.epub._generate()
-            tree1 = set(self._walk(self.epub.EPUB_DIR))
-            tree2 = set(self._walk(example_book))
+            tree1 = self._walk(self.epub.EPUB_DIR)
+            tree2 = self._walk(example_book)
             self.assertEqual(tree1, tree2)
         finally:
             shutil.rmtree(self.epub.EPUB_DIR, True)
