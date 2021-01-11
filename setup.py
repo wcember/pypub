@@ -4,7 +4,7 @@ setup(
     name='pypub',
     version='1.5',
     packages=['pypub',],
-    package_data={'pypub': ['epub_templates/*',]},
+    package_data={'pypub': ['pypub/templates/*',]},
     author = 'William Cember',
     author_email = 'wcember@gmail.com',
     url = 'https://github.com/wcember/pypub',
