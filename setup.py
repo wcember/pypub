@@ -4,7 +4,7 @@ setup(
     name='pypub',
     version='1.5',
     packages=['pypub',],
-    package_data={'pypub': ['templates/*', 'static/*', 'static/**']},
+    package_data={'pypub': ['templates/*', 'static/*', 'static/css/*', 'static/img/*', 'static/fonts/*']},
     author='William Cember',
     author_email='wcember@gmail.com',
     url='https://github.com/wcember/pypub',
