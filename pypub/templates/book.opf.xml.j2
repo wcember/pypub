@@ -9,7 +9,7 @@
     <dc:identifier id="BookId" opf:scheme="UUID">{{ uid }}</dc:identifier>
     <dc:date opf:event="publication">{{ date }}</dc:date>
 
-    <meta name="cover" content="cover_png" />
+    <meta name="cover" content="cover_img" />
     <meta name="generator" content="PYPUB ePub Generator {{ version }}" />
   </metadata>
   <manifest>
@@ -22,13 +22,14 @@
     <item id="css_{{ id }}" href="styles/{{ css }}" media-type="text/css" />
     {%- endfor %}
     <!-- images references -->
+    <item id="cover_img" href="images/{{ cover_img }}" media-type="image/{{ cover_ext }}" />
     {%- for ext, image in images %}
     <item id="{{ image }}" href="images/{{ image }}" media-type="image/{{ ext }}" />
     {%- endfor %}
     <!-- chapter inclusions -->
     {%- for chapter in chapters %}
     <item href="{{ chapter.link }}" id="{{ chapter.id }}" media-type="application/xhtml+xml"/>
-    {% endfor %}
+    {%- endfor %}
   </manifest>
   <spine toc="ncx">
     <itemref idref="cover_page"/>

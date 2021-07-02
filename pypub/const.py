@@ -97,10 +97,10 @@ def copy_file(fpath: str, dir: str):
                     break
                 fw.write(chunk)
 
-def copy_image(fpath: str, dir: str):
+def copy_image(fpath: str, dir: str, local: bool = True):
     """copy image from static after confirming is image"""
     fout = os.path.join(dir, os.path.basename(fpath))
-    with open(os.path.join(LOCAL_DIR, fpath), 'rb') as fr:
+    with open(os.path.join(LOCAL_DIR, fpath) if local else fpath, 'rb') as fr:
         head = fr.read(20)
         if not imghdr.what(None, h=head):
             raise ValueError('invalid image: %s' % file1)

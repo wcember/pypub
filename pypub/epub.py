@@ -8,6 +8,7 @@ import zipfile
 import tempfile
 from typing import Optional
 from datetime import datetime
+from PIL import Image, ImageDraw, ImageFont
 
 from .const import *
 from .chapter import Chapter
@@ -49,7 +50,7 @@ class Epub:
         self.publisher   = publisher
         self.date        = date or datetime(dt.year, dt.month, dt.day).isoformat()
         self.uid         = uuid.uuid4()
-        self.cover_image = cover or os.path.join(LOCAL_DIR, 'static/cover.png')
+        self.cover_image = cover
         # trackers
         self.chapter_id = 0
         self.chapters   = []
@@ -70,6 +71,34 @@ class Epub:
         self.IMAGE_DIR    = os.path.join(self.OEBPS_DIR, 'images')
         self.STYLE_DIR    = os.path.join(self.OEBPS_DIR, 'styles')
 
+    def _generate_cover_image(self, opacity: int = 255):
+        """generate dynamic cover-image w/ text"""
+        assert opacity >= 0 and opacity < 256
+        # get variables and generate new temporary cover image
+        font_fill = fill=(255,255,255,opacity)
+        cover_img = os.path.join(LOCAL_DIR, 'static/img/cover.png')
+        cover_fnt = os.path.join(LOCAL_DIR, 'static/fonts/free_mono.ttf')
+        with Image.open(cover_img).convert("RGBA") as base:
+            # get dimensions of base-image in order to center text
+            width, height = base.size
+            # make a blank image for text, initialized to transparent text color
+            txt = Image.new("RGBA", base.size, (255,255,255,0))
+            fnt = ImageFont.truetype(cover_fnt, 40)
+            # get a drawing context
+            d = ImageDraw.Draw(txt)
+            # write title text at top of cover
+            text = self.title.title()
+            w, h = d.textsize(text, font=fnt)
+            d.text(((width-w)/2, 10), text, font=fnt, fill=font_fill)
+            # write author text at bottom of cover
+            text = self.creator.title()
+            w, h = d.textsize(text, font=fnt)
+            d.text(((width-w)/2, height-int(h*1.5)), text, font=fnt, fill=font_fill)
+            # write output cover directly into epub directory
+            self.cover_image = os.path.join(self.IMAGE_DIR, 'cover.png')
+            out = Image.alpha_composite(base, txt)
+            out.save(self.cover_image)
+
     def add_chapter(self, chapter: Chapter):
         """add a new chapter to the epub book"""
         chapter._assign(self.chapter_id, self.chapter_path)
@@ -88,7 +117,6 @@ class Epub:
         copy_file('static/mimetype',          self.EPUB_DIR)
         copy_file('static/container.xml',     self.META_INF_DIR)
         copy_file('static/coverpage.xhtml',   self.OEBPS_DIR)
-        copy_image('static/cover.png',        self.IMAGE_DIR)
         copy_file('static/css/coverpage.css', self.STYLE_DIR)
         copy_file('static/css/styles.css',    self.STYLE_DIR)
         # get vars and start writing chapters
@@ -100,11 +128,21 @@ class Epub:
             content = chapter._render(page_html, self.IMAGE_DIR, epub=epub_vars)
             with open(os.path.join(self.OEBPS_DIR, chapter.link), 'wb') as f:
                 f.write(content)
+        # handle cover-page generation/copying
+        if self.cover_image is None:
+            self._generate_cover_image()
+        else:
+            copy_image(self.cover_image, self.IMAGE_DIR, local=False)
+        # handle cover-page vars
+        cover_image = os.path.basename(self.cover_image)
+        epub_vars['cover_img'] = cover_image
+        epub_vars['cover_ext'] = self.cover_image.rsplit('.', 1)[-1]
         # update epub-vars with trackers for style files and image files
         epub_vars['styles'] = enumerate(os.listdir(self.STYLE_DIR), 0)
         epub_vars['images'] = [
             (i.rsplit('.', 1)[-1], i)
             for i in os.listdir(self.IMAGE_DIR)
+            if i != cover_image
         ]
         log.info('epub=%r, writing final templates' % self.title)
         # render and write the rest of the templates
