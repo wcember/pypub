@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="BookId">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:title>{{ title }}</dc:title>
+    <dc:creator opf:role="aut">{{ creator }}</dc:creator>
+    <dc:language>{{ language }}</dc:language>
+    <dc:rights>{{ rights }}</dc:rights>
+    <dc:publisher>{{ publisher }}</dc:publisher>
+    <dc:identifier id="BookId" opf:scheme="UUID">{{ uid }}</dc:identifier>
+    <dc:date opf:event="publication">{{ date }}</dc:date>
+
+    <meta name="cover" content="cover_img" />
+    <meta name="generator" content="PYPUB ePub Generator {{ version }}" />
+  </metadata>
+  <manifest>
+    <!-- static references -->
+    <item href="book.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+    <item href="toc.xhtml" id="toc" media-type="application/xhtml+xml"/>
+    <item href="coverpage.xhtml" id="cover_page" media-type="application/xhtml+xml" />
+    <!-- styles references -->
+    {%- for id, css in styles %}
+    <item id="css_{{ id }}" href="styles/{{ css }}" media-type="text/css" />
+    {%- endfor %}
+    <!-- images references -->
+    <item id="cover_img" href="images/{{ cover_img }}" media-type="image/{{ cover_ext }}" />
+    {%- for ext, image in images %}
+    <item id="{{ image }}" href="images/{{ image }}" media-type="image/{{ ext }}" />
+    {%- endfor %}
+    <!-- chapter inclusions -->
+    {%- for chapter in chapters %}
+    <item href="{{ chapter.link }}" id="{{ chapter.id }}" media-type="application/xhtml+xml"/>
+    {%- endfor %}
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="cover_page"/>
+    <itemref idref="toc"/>
+    {%- for chapter in chapters %}
+    <itemref idref="{{ chapter.id }}"/>
+    {%- endfor %}
+  </spine>
+  <guide>
+    <reference type="toc" title="Table of Contents" href="toc.xhtml"/>
+  </guide>
+</package>
