@@ -71,6 +71,23 @@ class Epub:
         self.IMAGE_DIR    = os.path.join(self.OEBPS_DIR, 'images')
         self.STYLE_DIR    = os.path.join(self.OEBPS_DIR, 'styles')
 
+    @staticmethod
+    def _generate_font(
+        font:        str,
+        text:        str,
+        target_size: float,
+        max_size:    int,
+        max_width:   int
+    ) -> ImageFont:
+        """generate font with dynamic size based on the given criteria"""
+        size = 5
+        fnt = ImageFont.truetype(font, size)
+        # iterate until the text size is just larger than the criteria
+        while fnt.getsize(text)[0] <= target_size*max_width and size < max_size:
+            size += 1
+            fnt = ImageFont.truetype(font, size)
+        return fnt
+
     def _generate_cover_image(self, opacity: int = 255):
         """generate dynamic cover-image w/ text"""
         assert opacity >= 0 and opacity < 256
@@ -83,15 +100,16 @@ class Epub:
             width, height = base.size
             # make a blank image for text, initialized to transparent text color
             txt = Image.new("RGBA", base.size, (255,255,255,0))
-            fnt = ImageFont.truetype(cover_fnt, 40)
             # get a drawing context
             d = ImageDraw.Draw(txt)
             # write title text at top of cover
             text = self.title.title()
+            fnt  = self._generate_font(cover_fnt, text, 0.9, 60, width)
             w, h = d.textsize(text, font=fnt)
             d.text(((width-w)/2, 10), text, font=fnt, fill=font_fill)
             # write author text at bottom of cover
             text = self.creator.title()
+            fnt  = self._generate_font(cover_fnt, text, 0.5, 40, width)
             w, h = d.textsize(text, font=fnt)
             d.text(((width-w)/2, height-int(h*1.5)), text, font=fnt, fill=font_fill)
             # write output cover directly into epub directory
