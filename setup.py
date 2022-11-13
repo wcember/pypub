@@ -5,7 +5,7 @@ setup(
     version='2.0.0',
     packages=['pypub',],
     package_data={'pypub': ['templates/*', 'static/*', 'static/css/*', 'static/img/*', 'static/fonts/*']},
-    author='Andrew C Scott',
+    author='Andrew Scott',
     author_email='imgurbot12@gmail.com',
     url='https://github.com/imgurbot12/pypub',
     license='MIT',
