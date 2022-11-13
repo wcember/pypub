@@ -6,7 +6,7 @@ import uuid
 import shutil
 import zipfile
 import tempfile
-from typing import Optional
+from typing import Optional, Tuple
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 
@@ -83,10 +83,17 @@ class Epub:
         size = 5
         fnt = ImageFont.truetype(font, size)
         # iterate until the text size is just larger than the criteria
-        while fnt.getsize(text)[0] <= target_size*max_width and size < max_size:
+        while fnt.getlength(text) <= target_size*max_width and size < max_size:
             size += 1
             fnt = ImageFont.truetype(font, size)
         return fnt
+    
+    @staticmethod
+    def _textsize(d: ImageDraw, txt: str, fnt: ImageFont) -> Tuple[int, int]:
+        """support deprecated function for older versions of Pillow"""
+        if hasattr(d, 'textbbox'):
+            return d.textbbox((0, 0), txt, font=fnt)[2:]
+        return d.textsize(txt, font=fnt)
 
     def _generate_cover_image(self, opacity: int = 255):
         """generate dynamic cover-image w/ text"""
@@ -105,12 +112,12 @@ class Epub:
             # write title text at top of cover
             text = self.title.title()
             fnt  = self._generate_font(cover_fnt, text, 0.9, 60, width)
-            w, h = d.textsize(text, font=fnt)
+            w, h = self._textsize(d, text, fnt)
             d.text(((width-w)/2, 10), text, font=fnt, fill=font_fill)
             # write author text at bottom of cover
             text = self.creator.title()
             fnt  = self._generate_font(cover_fnt, text, 0.5, 40, width)
-            w, h = d.textsize(text, font=fnt)
+            w, h = self._textsize(d, text, fnt)
             d.text(((width-w)/2, height-int(h*1.5)), text, font=fnt, fill=font_fill)
             # write output cover directly into epub directory
             self.cover_image = os.path.join(self.IMAGE_DIR, 'cover.png')
