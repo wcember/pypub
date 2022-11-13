@@ -1,0 +1,8 @@
+@page, body, div, img {
+	padding: 0pt;
+	margin:0pt;
+}
+
+body {
+	text-align: center;
+}
