@@ -1,14 +1,16 @@
-'epub.py functions and classes'
-from epub import Epub
+"""
+epub library designed to build and generate ebooks in ePub format
+"""
 
-'chapter.py functions and classes'
-from chapter import Chapter
-from chapter import ChapterFactory
-from chapter import create_chapter_from_url
-from chapter import create_chapter_from_file
-from chapter import create_chapter_from_string
-from chapter import save_image
+#** Variables **#
+__all__ = [
+    'Epub',
+    'Chapter',
 
-'clean.py functions and classes'
-from clean import clean
+    'create_chapter_from_url',
+    'create_chapter_from_file',
+    'create_chapter_from_string'
+]
 
+from .epub import *
+from .chapter import *
