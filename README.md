@@ -2,21 +2,24 @@
 
 Create epub's using python. Pypub is a python library to create epub files quickly without having to worry about the intricacies of the epub specification.
 
+This package was orignally forked and re-writen based on WCember's [python2 version](https://github.com/wcember/pypub)
+but due to lack of any response has been re-released as a new package to support python3
+
 # Installation #
 The current release of pypub is available through pip:
 
-    $ pip install pypub
+    $ pip install pypub3
 
-Pypub is currently only compatible with Python 2.
+Pypub is only compatible with Python <= 3.6.
 
 # Quickstart #
 
-```python
->>> import pypub
->>> my_first_epub = pypub.Epub('My First Epub')
->>> my_first_chapter = pypub.create_chapter_from_url('https://en.wikipedia.org/wiki/EPUB')
->>> my_first_epub.add_chapter(my_first_chapter)
->>> my_first_epub.create_epub('OUTPUT_DIRECTORY')
+```python3
+import pypub
+my_first_epub = pypub.Epub('My First Epub')
+my_first_chapter = pypub.create_chapter_from_url('https://en.wikipedia.org/wiki/EPUB')
+my_first_epub.add_chapter(my_first_chapter)
+my_first_epub.create_epub('OUTPUT_DIRECTORY')
 ```
 
 # Features #
@@ -34,8 +37,8 @@ Documentation is available at [http://pypub.readthedocs.org/en/latest/developer_
 
 # Copyright and License #
 
-Copyright (c) 2020 William Cember
+Copyright (c) 2022 Andrew Scott
 
-[**Licensed**](https://github.com/wcember/pypub/blob/master/LICENSE) under the MIT License
+[**Licensed**](https://github.com/imgurbot12/pypub/blob/master/LICENSE) under the MIT License
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

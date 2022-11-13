@@ -2,12 +2,12 @@ from setuptools import setup
 
 setup(
     name='pypub',
-    version='1.5',
+    version='2.0.0',
     packages=['pypub',],
     package_data={'pypub': ['templates/*', 'static/*', 'static/css/*', 'static/img/*', 'static/fonts/*']},
-    author='William Cember',
-    author_email='wcember@gmail.com',
-    url='https://github.com/wcember/pypub',
+    author='Andrew C Scott',
+    author_email='imgurbot12@gmail.com',
+    url='https://github.com/imgurbot12/pypub',
     license='MIT',
     install_requires=[
         'requests',
