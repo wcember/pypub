@@ -1,16 +1,16 @@
-# Pypub #
+# Pypub 3 #
 
-Create epub's using python. Pypub is a python library to create epub files quickly without having to worry about the intricacies of the epub specification.
+Create epub's using Python. Pypub is a Python library to create epub files quickly, without having to worry about the intricacies of the epub specification.
 
-This package was orignally forked and re-writen based on WCember's [python2 version](https://github.com/wcember/pypub)
-but due to lack of any response has been re-released as a new package to support python3
+This package was orignally forked and re-written based on [WCember's Python 2 version](https://github.com/wcember/pypub),
+but due to a lack of response has been re-released as a new package to support Python 3.
 
 # Installation #
 The current release of pypub is available through pip:
 
     $ pip install pypub3
 
-Pypub is only compatible with Python <= 3.6.
+Pypub3 is only compatible with Python <= 3.6.
 
 # Quickstart #
 
@@ -26,7 +26,7 @@ my_first_epub.create_epub('OUTPUT_DIRECTORY')
 * Pypub is **easy to install** and has minimal dependencies.
 * Pypub **abstracts the epub specification**. Create epubs without worrying about what an NCX is.
 * Pypub can **create epubs from websites, html files, strings**, or a combination of all three.
-* Pypub can **clean up poorly formatted and complicated html** so it will cleanly as a chapter in your book.
+* Pypub can **clean up poorly formatted and complicated html**, so it will show cleanly as a chapter in your book.
 * Pypub **creates epubs specifically so they can be converted into Amazon Kindle mobi or azw3 files**. Don't know which tags Amazon supports? Don't worry about it because pypub does. 
 * Pypub is **customizable**. Don't like the way pypub sanitizes html files for you ebook? Pypub can be configured with your own sanitation function.
 * Pypub is **licensed under the MIT license**. Do what you want with it.
