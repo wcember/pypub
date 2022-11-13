@@ -1,5 +1,5 @@
 Tutorial - create an epub from reddit stories
-*****************
+**********************************************
 
 Ready to get started? In this tutorial we will create an epub from the top stories currently on reddit.
 
@@ -10,9 +10,9 @@ Before you start, make sure the following is true
 - In this tutorial, we are going to use the python package `praw <https://praw.readthedocs.io/en/stable/#installation>`_ to access reddit's api. Download that too. While praw is necessary for this tutorial, you do not need it to use pypub.
 - (Optional) If you want to read your ebook on kindle, you'll need to convert it to a mobi file. Download `KindleGen <http://www.amazon.com/gp/feature.html?docId=1000765211>`_ to do this.
 
-****************
+***********************************
 Find the stories you're interested
-****************
+***********************************
 For this tutorial, we are going to grab the top stories from the subreddit `r/TrueReddit <http://reddit.com/r/TrueReddit/>`_. Pypub works with (most) websites, and the code contained here is easily generalizable to other content sources.
 
 Let's begin by importing pypub as well as the other python libraries we're using for this tutorial
@@ -52,9 +52,9 @@ Finally, let's create our epub file. The below code saves it in the current work
 
 At this point, in the directory you're working in, you should have a file *TrueReddit - Top Stories.epub*. This is your ebook with the top stories from r/TrueReddit and you should be able to read on your favorite device (unless that device is a kindle...see the next section).
 
-****************
+***************************
 (Optional) Convert to mobi
-****************
+***************************
 If you're like me, then you like reading things on your kindle (which is why I created pypub in the first place). Unfortunately, kindle uses it's own format for ebooks.
 
 Luckily, Amazon provided a tool, KindleGen to convert epubs (and other formats) to mobi so they can be viewed on kindle. Once it's downloaded, convert *TrueReddit - Top Stories.epub* by going to the command prompt and entering kindlegen's full file path (excluding .exe) followed by "TrueReddit - Top Stories.epub".
