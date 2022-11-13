@@ -10,7 +10,8 @@ clean:
 setup:
 	python3 setup.py $(DIST)
 
-
 publish-test:
 	twine upload -r testpypi dist/*
 
+publish:
+	twine upload dist/*
