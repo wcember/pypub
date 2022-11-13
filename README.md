@@ -33,7 +33,7 @@ my_first_epub.create_epub('OUTPUT_DIRECTORY')
 
 # Documentation #
 
-Documentation is available at [http://pypub.readthedocs.org/en/latest/developer_interface.html](http://pypub.readthedocs.org/en/latest/developer_interface.html)
+Documentation is available at [http://pypub3.readthedocs.org/en/latest/developer_interface.html](http://pypub3.readthedocs.org/en/latest/developer_interface.html)
 
 # Copyright and License #
 
