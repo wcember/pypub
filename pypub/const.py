@@ -140,18 +140,18 @@ def xmlprettify(elem: lxml.html.HtmlElement, chars: str='  ', _level: int=1):
     if children:
         # make modifications
         if elem.text:
-            elem.text = elem.text.strip() + start
+            elem.text = elem.text.rstrip() + start
         if elem.tail:
-            elem.tail = elem.tail.strip() + end
+            elem.tail = elem.tail.rstrip() + end
         # iterate children
         for child in children:
             xmlprettify(child, chars, _level + 1)
         # ensure last child has tail indentation of parent
-        child.tail = (child.tail or '').strip() + end
+        child.tail = (child.tail or '').rstrip() + end
     else:
-        elem.text = '' if not elem.text else elem.text.strip()
+        elem.text = '' if not elem.text else elem.text
         if elem.tail:
-            elem.tail = (elem.tail or '').strip() + end
+            elem.tail = (elem.tail or '').rstrip() + end
 
 #** Init **#
 log = _make_logger()
