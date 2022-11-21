@@ -120,7 +120,7 @@ class ChapterTests(unittest.TestCase):
     def _clean(self, content: str) -> str:
         """return clean content-str using chapter etree-generation"""
         # generate etree
-        etree = Chapter('title', content)._new_etree()
+        etree = Chapter('title', content).parse_etree()
         # condense etree
         for elem in etree.iter():
             elem.tail = None
@@ -133,7 +133,7 @@ class ChapterTests(unittest.TestCase):
         example = os.path.join(static, 'example.html')
         c       = create_chapter_from_file(example)
         self.assertEqual(c.title, 'Business & Co')
-        self.assertEqual(c.url, None)
+        self.assertEqual(c.url, f'file://{os.path.abspath(example)}')
         self.assertEqual(c.html_title, 'Business &amp; Co')
 
     def test_chapter_clean_images(self):

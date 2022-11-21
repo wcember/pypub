@@ -5,9 +5,9 @@ import os
 import html
 import uuid
 import imghdr
-import requests
 import lxml.html
 import urllib.parse
+import urllib.request
 from jinja2 import Template
 from typing import Optional
 
@@ -22,10 +22,11 @@ __all__ = [
     'create_chapter_from_string',
 ]
 
-_session = requests.Session()
-_session.headers = {
-    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0'
-}
+# install believable browser user-agent for default urllib.request.open
+ua     = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0'
+opener = urllib.request.build_opener()
+opener.addheaders = [('User-agent', ua)]
+urllib.request.install_opener(opener)
 
 #** Functions **#
 
@@ -35,6 +36,7 @@ def create_chapter_from_string(
     url:           Optional[str] = None,
     title_xpath:   Optional[str] = None,
     content_xpath: Optional[str] = None,
+    factory:       Optional['Chapter'] = None,
 ) -> 'Chapter':
     """
     generate a chapter object from the given html string
@@ -44,6 +46,7 @@ def create_chapter_from_string(
     :param url:           url assigned to this particular chapter
     :param title_xpath:   xpath used to find title in html
     :param content_xpath: xpath used to find content in html
+    :param factory:       chapter factory override (for customization)
     """
     html  = '<div>%s</div>' % html
     etree = None
@@ -74,7 +77,8 @@ def create_chapter_from_string(
                 etree.append(child)
             html = lxml.html.tostring(etree).decode()
     # generate chapter object
-    return Chapter(title, html, url)
+    factory = factory or Chapter
+    return factory(title=title, content=html, url=url)
 
 def create_chapter_from_file(
     fpath:         str,
@@ -82,6 +86,7 @@ def create_chapter_from_file(
     url:           Optional[str] = None,
     title_xpath:   Optional[str] = None,
     content_xpath: Optional[str] = None,
+    factory:       Optional['Chapter'] = None,
 ) -> 'Chapter':
     """
     generate a chapter object from the given file
@@ -91,16 +96,19 @@ def create_chapter_from_file(
     :param url:           url assigned to this particular chapter
     :param title_xpath:   xpath used to find title in html
     :param content_xpath: xpath used to find content in html
+    :param factory:       chapter factory override (for customization)
     """
     with open(fpath, 'r') as f:
+        url = url or f'file://{os.path.abspath(fpath)}'
         return create_chapter_from_string(f.read(),
-            title, url, title_xpath, content_xpath)
+            title, url, title_xpath, content_xpath, factory)
 
 def create_chapter_from_url(
     url:           str,
     title:         Optional[str] = None,
     title_xpath:   Optional[str] = None,
     content_xpath: Optional[str] = None,
+    factory:       Optional['Chapter'] = None,
 ) -> 'Chapter':
     """
     generate a chapter object from the given file
@@ -109,10 +117,11 @@ def create_chapter_from_url(
     :param title:         title used for the given chpater
     :param title_xpath:   xpath used to find title in html
     :param content_xpath: xpath used to find content in html
+    :param factory:       chapter factory override (for customization)
     """
-    r = _session.get(url, timeout=10)
-    return create_chapter_from_string(r.text,
-        title, url, title_xpath, content_xpath)
+    r = urllib.request.urlopen(url, timeout=10)
+    return create_chapter_from_string(r.read().decode('latin1'),
+        title, url, title_xpath, content_xpath, factory)
 
 #** Classes **#
 
@@ -142,9 +151,9 @@ class Chapter:
         self.id         = 'page_%d' % id
         self.link       = link
         self.play_order = id
-        self.etree      = self._new_etree()
+        self.etree      = self.parse_etree()
 
-    def _new_etree(self) -> Optional[lxml.html.HtmlElement]:
+    def parse_etree(self) -> Optional[lxml.html.HtmlElement]:
         """generate new filtered element-tree"""
         etree = lxml.html.fromstring(self.content)
         # check if we can minimalize the scope
@@ -178,7 +187,7 @@ class Chapter:
         # return new element-tree
         return etree
 
-    def _replace_images(self, image_dir: str):
+    def replace_images(self, image_dir: str, timeout: int = 10):
         """replace image references w/ local downloaded ones"""
         _downloads = set()
         for img in self.etree.xpath('.//img[@src]'):
@@ -192,10 +201,18 @@ class Chapter:
             (head, fname, file) = (True, None, None)
             try:
                 log.debug('chapter[%s] download img: %s' % (self.title, url))
-                with _session.get(url, timeout=10, stream=True) as r:
-                    r.raise_for_status()
-                    for chunk in r.iter_content(chunk_size=8192):
-                        # check image-type in first chunk
+                with urllib.request.urlopen(url, timeout=timeout) as r:
+                    # check status of response
+                    if r.status is not None and r.status != 200:
+                        raise RuntimeError(
+                            f'Url: {url!r}, Invalid Status: {r.status!r}')
+                    # read content in chunks
+                    while True:
+                        # read next chunk from request
+                        chunk = r.read(8192)
+                        if not chunk:
+                            break
+                        # check image-type on first chunk
                         if head:
                             head = False
                             mime = imghdr.what(None, h=chunk)
@@ -212,11 +229,27 @@ class Chapter:
                     img.attrib['src'] = os.path.join('images/', fname)
                 if file:
                     file.close()
+   
+    @staticmethod
+    def prettify(elem: lxml.html.HtmlElement):
+        """
+        chapter xml prettify function (available as method to allow override)
 
-    def _render(self, template: Template, image_dir: str, **kw: str) -> bytes:
-        """render chapter content and attach it to the template"""
+        :param elem: html-element to be prettified
+        """
+        xmlprettify(elem)
+
+    def render(self, template: Template, image_dir: str, **kw: str) -> bytes:
+        """
+        render chapter content and attach it to the template
+
+        :param template:  jinja2 template used to render chapter content
+        :param image_dir: chapter directory to assign images to
+        :param kw:        additional arguments to pass to jinaj2 renderer
+        :return:          rendered chapter as bytestring
+        """
         # replace images in etree
-        self._replace_images(image_dir)
+        self.replace_images(image_dir)
         # render template and xml tree to attach elements to
         content = template.render(**kw, chapter=vars(self))
         etree   = lxml.html.fromstring(content.encode())
@@ -225,5 +258,5 @@ class Chapter:
         for elem in self.etree.getchildren():
             body.append(elem)
         # return html as string to be written
-        xmlprettify(etree)
+        self.prettify(elem)
         return lxml.html.tostring(etree, method='xml')

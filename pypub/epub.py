@@ -99,7 +99,7 @@ class Epub:
         """generate dynamic cover-image w/ text"""
         assert opacity >= 0 and opacity < 256
         # get variables and generate new temporary cover image
-        font_fill = fill=(255,255,255,opacity)
+        font_fill = (255,255,255,opacity)
         cover_img = os.path.join(LOCAL_DIR, 'static/img/cover.png')
         cover_fnt = os.path.join(LOCAL_DIR, 'static/fonts/free_mono.ttf')
         with Image.open(cover_img).convert("RGBA") as base:
@@ -150,7 +150,7 @@ class Epub:
         page_html = read_template('templates/page.xhtml.xml.j2')
         for n, chapter in enumerate(self.chapters, 1):
             log.info('rendering chapter #%d: %r' % (n, chapter.title))
-            content = chapter._render(page_html, self.IMAGE_DIR, epub=epub_vars)
+            content = chapter.render(page_html, self.IMAGE_DIR, epub=epub_vars)
             with open(os.path.join(self.OEBPS_DIR, chapter.link), 'wb') as f:
                 f.write(content)
         # handle cover-page generation/copying
@@ -192,7 +192,7 @@ class Epub:
             log.info('epub=%r, zipping content' % self.title)
             zipf = zipfile.ZipFile(fzip, 'w', zipfile.ZIP_DEFLATED)
             path = self.EPUB_DIR.rstrip('/') + '/'
-            for root, dirs, files in os.walk(path):
+            for root, _, files in os.walk(path):
                 fp = root.split(path, 1)[1]
                 for file in files:
                     rootf  = os.path.join(root, file)
