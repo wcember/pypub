@@ -63,7 +63,7 @@ SUPPORTED_TAGS = {
     'sup':        ['class', 'id'],
     'u':          ['id'],
     'ul':         ['class', 'id'],
-    'var':        []
+    'var':        [],
 }
 
 #** Functions **#
@@ -103,7 +103,7 @@ def copy_image(fpath: str, dir: str, local: bool = True):
     with open(os.path.join(LOCAL_DIR, fpath) if local else fpath, 'rb') as fr:
         head = fr.read(20)
         if not imghdr.what(None, h=head):
-            raise ValueError('invalid image: %s' % file1)
+            raise ValueError('invalid image: %s' % fpath)
         # write content
         with open(fout, 'wb') as fw:
             fw.write(head)
