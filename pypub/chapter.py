@@ -120,7 +120,7 @@ def create_chapter_from_url(
     :param factory:       chapter factory override (for customization)
     """
     r = urllib.request.urlopen(url, timeout=10)
-    return create_chapter_from_string(r.read().decode('latin1'),
+    return create_chapter_from_string(r.read().decode(),
         title, url, title_xpath, content_xpath, factory)
 
 #** Classes **#
