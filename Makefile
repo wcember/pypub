@@ -1,6 +1,6 @@
 # Minimal makefile for building and publishing pypub
 
-DIST = sdist bdist_wheel
+DIST = sdist 
 
 build: clean setup
 
