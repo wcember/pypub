@@ -4,11 +4,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link type="text/css" rel="stylesheet" href="styles/styles.css"/>
-    <title>{{ epub.title }} - {{ chapter.html_title }}</title>
+    <title>{{ epub.title }} - {{ chapter.title | e }}</title>
   </head>
   <body>
     {# header goes here #}
-    <h2>{{ chapter.html_title }}</h2>
+    <h2>{{ chapter.title | e }}</h2>
     <p><br/></p>
     <hr/>
     {# body will be added using lxml injection below #}

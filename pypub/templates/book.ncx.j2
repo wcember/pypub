@@ -6,13 +6,13 @@
     <meta name="dtb:totalPageCount" content="0"/>
     <meta name="dtb:maxPageNumber" content="0"/>
   </head>
-  <docTitle><text>{{ title }}</text></docTitle>
-  <docAuthor><text>{{ creator }}</text></docAuthor>
+  <docTitle><text>{{ epub.title }}</text></docTitle>
+  <docAuthor><text>{{ epub.creator }}</text></docAuthor>
   <navMap>
-    {%- for chapter in chapters %}
-    <navPoint id="{{ chapter.id }}" playOrder="{{ chapter.play_order }}">
+    {%- for (assign, chapter) in epub.chapters %}
+    <navPoint id="{{ assign.id }}" playOrder="{{ assign.play_order }}">
       <navLabel><text>{{ chapter.title }}</text></navLabel>
-      <content src="{{ chapter.link }}"/>
+      <content src="{{ assign.link }}"/>
     </navPoint>
     {%- endfor %}
   </navMap>

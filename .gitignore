@@ -1,10 +1,7 @@
-pypub/test_files/epub_output/
-
-*.epub
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+
 # C extensions
 *.so
 

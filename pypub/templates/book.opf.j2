@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="BookId">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
-    <dc:title>{{ title }}</dc:title>
-    <dc:creator opf:role="aut">{{ creator }}</dc:creator>
-    <dc:language>{{ language }}</dc:language>
-    <dc:rights>{{ rights }}</dc:rights>
-    <dc:publisher>{{ publisher }}</dc:publisher>
-    <dc:identifier id="BookId" opf:scheme="UUID">{{ uid }}</dc:identifier>
-    <dc:date opf:event="publication">{{ date }}</dc:date>
+    <dc:title>{{ epub.title }}</dc:title>
+    <dc:creator opf:role="aut">{{ epub.creator }}</dc:creator>
+    <dc:language>{{ epub.language }}</dc:language>
+    <dc:rights>{{ epub.rights }}</dc:rights>
+    <dc:publisher>{{ epub.publisher }}</dc:publisher>
+    <dc:identifier id="BookId" opf:scheme="UUID">{{ epub.uid }}</dc:identifier>
+    <dc:date opf:event="publication">{{ epub.date.isoformat() }}</dc:date>
 
     <meta name="cover" content="cover_img" />
     <meta name="generator" content="PYPUB ePub Generator {{ version }}" />
@@ -18,24 +18,24 @@
     <item href="toc.xhtml" id="toc" media-type="application/xhtml+xml"/>
     <item href="coverpage.xhtml" id="cover_page" media-type="application/xhtml+xml" />
     <!-- styles references -->
-    {%- for id, css in styles %}
-    <item id="css_{{ id }}" href="styles/{{ css }}" media-type="text/css" />
+    {%- for css in styles %}
+    <item id="css_{{ loop.index }}" href="styles/{{ css }}" media-type="text/css" />
     {%- endfor %}
     <!-- images references -->
-    <item id="cover_img" href="images/{{ cover_img }}" media-type="image/{{ cover_ext }}" />
-    {%- for ext, image in images %}
-    <item id="{{ image }}" href="images/{{ image }}" media-type="image/{{ ext }}" />
+    <item id="cover_img" href="images/{{ cover.name }}" media-type="image/{{ cover.mime }}" />
+    {%- for image in images %}
+    <item id="{{ image.name }}" href="images/{{ image.name }}" media-type="image/{{ image.mime }}" />
     {%- endfor %}
     <!-- chapter inclusions -->
-    {%- for chapter in chapters %}
-    <item href="{{ chapter.link }}" id="{{ chapter.id }}" media-type="application/xhtml+xml"/>
+    {%- for (assign, _) in epub.chapters %}
+    <item href="{{ assign.link }}" id="{{ assign.id }}" media-type="application/xhtml+xml"/>
     {%- endfor %}
   </manifest>
   <spine toc="ncx">
     <itemref idref="cover_page"/>
     <itemref idref="toc"/>
-    {%- for chapter in chapters %}
-    <itemref idref="{{ chapter.id }}"/>
+    {%- for (assign, _) in epub.chapters %}
+    <itemref idref="{{ assign.id }}"/>
     {%- endfor %}
   </spine>
   <guide>
