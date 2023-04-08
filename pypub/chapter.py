@@ -66,6 +66,9 @@ def convert_text(text: str) -> bytes:
     """
     root = lxml.html.Element('body')
     for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
         elem = lxml.html.Element('p')
         elem.text = html.escape(line)
         root.append(elem)

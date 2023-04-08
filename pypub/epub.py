@@ -74,6 +74,12 @@ def generate_font(text: str, target_ratio: float, maxsize: int, maxwidth: int):
         font = ImageFont.truetype(COVER_FONT, size)
     return font
 
+def get_textsize(draw, text, font) -> Tuple[int, int]:
+    """retrieve text-size of the current draw image"""
+    if hasattr(draw, 'textbbox'):
+        return draw.textbbox((0, 0), text, font=font)[2:]
+    return draw.textsize(text, font=font)
+
 def generate_cover(title: str, author: str, images: str) -> str:
     """generate cover image using PIL text overlay"""
     title  = title.title()
@@ -84,11 +90,11 @@ def generate_cover(title: str, author: str, images: str) -> str:
         draw = ImageDraw.Draw(image)
         # draw title on the top of the cover
         font = generate_font(title, 0.9, 60, width)
-        w, _ = draw.textsize(title, font=font)
+        w, _ = get_textsize(draw, title, font=font)
         draw.text(((width-w)/2, 10), title, font=font, fill=fill)
         # draw author on the bottom of the cover
         font = generate_font(title, 0.5, 40, width)
-        w, h = draw.textsize(author, font=font)
+        w, h = get_textsize(draw, author, font=font)
         draw.text(((width-w)/2, height-int(h*1.5)), author, font=font, fill=fill)
         # write cover directly into epub directory
         fpath = os.path.join(images, 'cover.png')

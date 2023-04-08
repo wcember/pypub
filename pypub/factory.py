@@ -87,7 +87,7 @@ def render_images(ctx: 'RenderCtx', chunk_size: int = 8192):
         fmt = (ctx.chapter.title, url)
         if '://' not in url:
             if not ctx.chapter.url:
-                ctx.logger.warn(
+                ctx.logger.warning(
                     'chapter[%s] cannot render image %r w/o chapter-url' % fmt)
                 continue
             url = urllib.parse.urljoin(ctx.chapter.url, url)
@@ -107,7 +107,7 @@ def render_images(ctx: 'RenderCtx', chunk_size: int = 8192):
             chunk = r.read(chunk_size)
             mime  = imghdr.what(None, h=chunk)
             if not mime:
-                ctx.logger.warn('chapter[%s] cannot identify %r mime' % fmt)
+                ctx.logger.warning('chapter[%s] cannot identify %r mime' % fmt)
                 continue
             fname = f'{uuid.uuid4()}.{mime}'
             fpath = os.path.join(ctx.imagedir, fname)
