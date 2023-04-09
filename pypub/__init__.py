@@ -5,6 +5,9 @@ Epub library designed to build and generate ebooks in ePub format
 #** Variables **#
 __all__ = [
     'Epub',
+    'Assignment',
+    'EpubBuilder',
+
     'Chapter',
     'ChapterFactory',
     'SimpleChapterFactory',
@@ -17,5 +20,6 @@ __all__ = [
 
 #** Imports **#
 from .epub import Epub
+from .builder import Assignment, EpubBuilder
 from .chapter import *
 from .factory import ChapterFactory, SimpleChapterFactory

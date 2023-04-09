@@ -3,7 +3,7 @@ import shutil
 import unittest
 from typing import Set
 
-from ..epub import Epub, epub_dirs
+from ..epub import Epub
 from ..chapter import create_chapter_from_file
 
 #** Variables **#
@@ -35,14 +35,13 @@ class EpubTests(unittest.TestCase):
 
     def test_create_epub(self):
         """generate an epub directory-tree ready for zipping"""
-        dirs = epub_dirs(self.epub.epub_dir)
         try:
-            self.epub.build_epub_dir(dirs)
-            tree1 = self._walk(dirs.basedir)
+            edir  = self.epub.build_epub_dir()
+            tree1 = self._walk(edir)
             tree2 = self._walk(EXAMPLE_BOOK)
             self.assertEqual(tree1, tree2)
         finally:
-            shutil.rmtree(dirs.basedir, True)
+            self.epub.builder.cleanup()
 
 #** Main **#
 

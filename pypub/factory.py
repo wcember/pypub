@@ -3,6 +3,7 @@ Chapter Rendering Factory Implementation
 """
 import os
 import uuid
+import urllib.error
 import urllib.parse
 import urllib.request
 from logging import Logger
@@ -98,13 +99,13 @@ def render_images(ctx: 'RenderCtx', chunk_size: int = 8192):
             continue
         # download url into local image folder for epub
         ctx.logger.debug(f'chapter[%s] downloading image: %r' % fmt)
-        with urlrequest(url, timeout=ctx.timeout) as r:
+        try:
+            res = urlrequest(url, timeout=ctx.timeout)
             # ensure status of response is valid
-            if r.status and r.status != 200:
-                ctx.logger.error('chapter[%s] failed to download %r' % fmt)
-                continue
+            if res.status and res.status != 200:
+                raise urllib.error.URLError(f'status: {res.status}')
             # read first chunk to determine content-type
-            chunk = r.read(chunk_size)
+            chunk = res.read(chunk_size)
             mime  = imghdr.what(None, h=chunk)
             if not mime:
                 ctx.logger.warning('chapter[%s] cannot identify %r mime' % fmt)
@@ -115,11 +116,13 @@ def render_images(ctx: 'RenderCtx', chunk_size: int = 8192):
             with open(fpath, 'wb') as f:
                 while chunk:
                     f.write(chunk)
-                    chunk = r.read(chunk_size)
+                    chunk = res.read(chunk_size)
             # save epub-path in downloads cache and update image attribs
             epub_path = os.path.join('images/', fname)
             downloads[url] = epub_path
             image.attrib['src'] = epub_path
+        except urllib.error.URLError:
+            ctx.logger.error('chapter[%s] failed to download %r' % fmt)
 
 def xmlprettify(elem: HtmlElement, chars: str='  ', level: int=1):
     """

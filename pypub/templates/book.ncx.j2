@@ -9,7 +9,7 @@
   <docTitle><text>{{ epub.title }}</text></docTitle>
   <docAuthor><text>{{ epub.creator }}</text></docAuthor>
   <navMap>
-    {%- for (assign, chapter) in epub.chapters %}
+    {%- for (assign, chapter) in chapters %}
     <navPoint id="{{ assign.id }}" playOrder="{{ assign.play_order }}">
       <navLabel><text>{{ chapter.title }}</text></navLabel>
       <content src="{{ assign.link }}"/>

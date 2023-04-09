@@ -27,14 +27,14 @@
     <item id="{{ image.name }}" href="images/{{ image.name }}" media-type="image/{{ image.mime }}" />
     {%- endfor %}
     <!-- chapter inclusions -->
-    {%- for (assign, _) in epub.chapters %}
+    {%- for (assign, _) in chapters %}
     <item href="{{ assign.link }}" id="{{ assign.id }}" media-type="application/xhtml+xml"/>
     {%- endfor %}
   </manifest>
   <spine toc="ncx">
     <itemref idref="cover_page"/>
     <itemref idref="toc"/>
-    {%- for (assign, _) in epub.chapters %}
+    {%- for (assign, _) in chapters %}
     <itemref idref="{{ assign.id }}"/>
     {%- endfor %}
   </spine>

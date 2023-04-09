@@ -9,7 +9,7 @@
     <h2>Table of Contents</h2>
     <hr/>
     <div id="chapters">
-      {%- for (assign, chapter) in epub.chapters %}
+      {%- for (assign, chapter) in chapters %}
       <p><a href= "{{ assign.link }}">{{ chapter.title | e }}</a></p>
       {%- endfor %}
     </div>
