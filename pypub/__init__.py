@@ -1,6 +1,8 @@
 """
 Epub library designed to build and generate ebooks in ePub format
 """
+import sys
+sys.path.insert(0, '../pyxml')
 
 #** Variables **#
 __all__ = [

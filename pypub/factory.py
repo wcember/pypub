@@ -12,8 +12,8 @@ from dataclasses import dataclass, field
 from typing import Protocol
 
 import imghdr
-import lxml.html
-from lxml.html import HtmlElement
+import pyxml.html
+from pyxml.html import HtmlElement
 from jinja2 import Template
 
 from .chapter import Chapter, urlrequest, htmltostring
@@ -214,7 +214,7 @@ class SimpleChapterFactory(ChapterFactory):
         """
         content = content.decode('utf-8', 'replace').translate(REPLACE).encode()
         # check if we can minimalize the scope
-        etree   = lxml.html.fromstring(content)
+        etree   = pyxml.html.fromstring(content)
         body    = etree.xpath('.//body')
         etree   = body[0] if body else etree
         article = etree.xpath('.//article')
@@ -224,7 +224,7 @@ class SimpleChapterFactory(ChapterFactory):
             # if element tag is supported
             if elem.tag in SUPPORTED_TAGS:
                 # remove attributes not approved for specific tag
-                for attr in elem.attrib:
+                for attr in list(elem.attrib.keys()):
                     if attr not in SUPPORTED_TAGS[elem.tag]:
                         elem.attrib.pop(attr)
             # if element is not supported, append children to parent
@@ -263,7 +263,7 @@ class SimpleChapterFactory(ChapterFactory):
         """
         content = ctx.template.render(**ctx.render_kwargs)
         # attach elements from chapter etree to content etree
-        etree = lxml.html.fromstring(content.encode())
+        etree = pyxml.html.fromstring(content.encode())
         body  = etree.xpath('.//body')[0]
         for elem in ctx.etree.getchildren():
             body.append(elem)

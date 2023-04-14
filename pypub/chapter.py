@@ -8,7 +8,7 @@ from io import BytesIO
 from dataclasses import dataclass
 from typing import Optional
 
-import lxml.html
+import pyxml.html
 
 try:
     import mammoth
@@ -50,11 +50,11 @@ def urlrequest(url: str, timeout: int = 10):
     req = urllib.request.Request(url, headers=headers)
     return urllib.request.urlopen(req, timeout=timeout)
 
-def htmltostring(root: lxml.html.HtmlElement) -> bytes:
+def htmltostring(root: pyxml.html.HtmlElement) -> bytes:
     """
     convert html to bytes
     """
-    html = lxml.html.tostring(root, method='xml')
+    html = pyxml.html.tostring(root, method='xml')
     return html.encode() if isinstance(html, str) else html
 
 def convert_text(text: str) -> bytes:
@@ -64,12 +64,12 @@ def convert_text(text: str) -> bytes:
     :param text: raw bytes text
     :return:     html version of text
     """
-    root = lxml.html.Element('body')
+    root = pyxml.html.Element('body')
     for line in text.splitlines():
         line = line.strip()
         if not line:
             continue
-        elem = lxml.html.Element('p')
+        elem = pyxml.html.Element('p')
         elem.text = html.escape(line)
         root.append(elem)
     return htmltostring(root)
@@ -120,11 +120,11 @@ def create_chapter_from_html(
     :param content_xpath: xpath used to find content in html
     :return:              generated chapter object
     """
-    html  = b'<div>' + html + b'</html>'
+    html  = b'<html>' + html + b'</html>'
     etree = None
     # assign title according to title-xpath if specified
     if not title:
-        etree = etree or lxml.html.fromstring(html)
+        etree = etree or pyxml.html.fromstring(html)
         xpath = (title_xpath or './/title').rsplit('/text()', 1)[0] + '/text()'
         elem  = etree.xpath(xpath)
         if not elem and title_xpath:
@@ -132,13 +132,13 @@ def create_chapter_from_html(
         title = elem[0] if elem else 'Epub Chapter'
     # assign content according to content-xpath if specified
     if content_xpath:
-        etree = etree or lxml.html.fromstring(html)
+        etree = etree or pyxml.html.fromstring(html)
         elem  = etree.xpath(content_xpath)
         root  = None
         if not len(elem):
             raise ValueError(f'no content at xpath: {content_xpath!r}')
         if len(elem) > 1:
-            root = lxml.html.Element('div')
+            root = pyxml.html.Element('div')
             for child in elem:
                 root.append(child)
         else:
