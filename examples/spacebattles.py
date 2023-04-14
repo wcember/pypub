@@ -41,8 +41,6 @@ def request(url: str) -> pyxml.html.HtmlElement:
     body = res.read()
     if res.status and res.status != 200:
         raise RuntimeError('invalid response', res.status)
-    with open('broken.html', 'wb') as f:
-        f.write(body)
     return pyxml.html.fromstring(body)
 
 def get_pages(url: str) -> int:
