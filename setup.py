@@ -17,8 +17,9 @@ setup(
     packages=find_packages(),
     install_requires=[
         'jinja2',
-        'lxml',
-        'pillow'
+        'pyxml3',
+        'pillow',
+        'dataclasses',
     ],
     package_data={
         'pypub': [

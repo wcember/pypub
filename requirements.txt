@@ -1,6 +1,4 @@
-sphinxcontrib-napoleon>=0.7
-sphinx-autodoc-typehints>=1.11.0
-jinja2>=3.0.2
-requests>=2.24.0
-lxml>=4.5.1
-pillow>=9.3.0
+jinja2
+pyxml3
+pillow
+dataclasses
