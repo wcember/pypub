@@ -25,12 +25,12 @@ import chapter
 requests.packages.urllib3.disable_warnings()
 
 
-class _Minetype(object):
+class _Mimetype(object):
 
     def __init__(self, parent_directory):
-        minetype_template = os.path.join(EPUB_TEMPLATES_DIR, 'minetype.txt')
-        shutil.copy(minetype_template,
-                    os.path.join(parent_directory, 'minetype.txt'))
+        mimetype_template = os.path.join(EPUB_TEMPLATES_DIR, 'mimetype')
+        shutil.copy(mimetype_template,
+                    os.path.join(parent_directory, 'mimetype'))
 
 
 class _ContainerFile(object):
@@ -192,7 +192,7 @@ class Epub(object):
         self.toc_html = TocHtml()
         self.toc_ncx = TocNcx()
         self.opf = ContentOpf(self.title, self.creator, self.language, self.rights, self.publisher, self.uid)
-        self.minetype = _Minetype(self.EPUB_DIR)
+        self.mimetype = _Mimetype(self.EPUB_DIR)
         self.container = _ContainerFile(self.META_INF_DIR)
 
     def _create_directories(self, epub_dir=None):
