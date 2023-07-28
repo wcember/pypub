@@ -5,6 +5,7 @@ import string
 import shutil
 import tempfile
 import time
+from zipfile import ZipFile, ZIP_DEFLATED
 
 import jinja2
 import requests
@@ -264,8 +265,40 @@ class Epub(object):
                 os.remove(os.path.join(epub_name_with_path, '.zip'))
             except OSError:
                 pass
-            shutil.make_archive(epub_name_with_path, 'zip', self.EPUB_DIR)
-            return epub_name_with_path + '.zip'
+            # perform zip operation
+            # TODO cleanup chdir code
+            # TODO refactor/simplify walk code
+            # TODO compression - debug Stored for now
+            save_cwd = os.getcwd()
+            os.chdir(self.EPUB_DIR)
+            archname = epub_name_with_path + '.zip'
+            paths = ['.']
+            flist = None
+            if os.path.exists(archname):
+                os.unlink(archname)
+            if not flist:
+                flist = ['mimetype']
+                for path in paths:
+                    for root, dirs, files in os.walk(path):
+                        for fname in files:
+                            if fname == 'mimetype':
+                                continue
+                            fname = os.path.join(root, fname)
+                            flist.append(fname)
+            os.chdir(save_cwd)
+            arch = ZipFile(archname, 'w')#, ZIP_DEFLATED)  # FIXME
+            os.chdir(self.EPUB_DIR)
+            for fname in flist:
+                # . is bad for py24 under win,
+                # py 2.5 generates more sane entries for:
+                #   './filename' and '.\\filename'
+                print(fname)  # FIXME DEBUG
+                fname = os.path.normpath(fname)
+                arch.write(fname)
+            arch.close()
+            os.chdir(save_cwd)
+
+            return archname
 
         def turn_zip_into_epub(zip_archive):
             epub_full_name = zip_archive.strip('.zip') + '.epub'
