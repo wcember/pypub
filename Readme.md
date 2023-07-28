@@ -32,6 +32,13 @@ Pypub is currently only compatible with Python 2.
 
 Documentation is available at [http://pypub.readthedocs.org/en/latest/developer_interface.html](http://pypub.readthedocs.org/en/latest/developer_interface.html)
 
+# Dev Setup #
+
+To use code from a source code checkout from git
+
+    $ python -m pip install -r requirements.txt
+
+
 # Copyright and License #
 
 Copyright (c) 2020 William Cember
