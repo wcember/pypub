@@ -105,7 +105,7 @@ def clean(input_string,
     for node in image_node_list:
         if not node.has_attr('src'):
             node.extract()
-    unformatted_html_unicode_string = unicode(root.prettify(encoding='utf-8',
+    unformatted_html_unicode_string = unicode(root.prettify(encoding='utf-8',  # FIXME remove or make a debug option (https://github.com/wcember/pypub/issues/18). From bs4 docs, prettify() is for debugging purposes only - https://www.crummy.com/software/BeautifulSoup/bs4/doc/#pretty-printing `Since it adds whitespace (in the form of newlines), prettify() changes the meaning of an HTML document and should not be used to reformat one. The goal of prettify() is to help you visually understand the structure of the documents you work with.`
                                                             formatter=EntitySubstitution.substitute_html),
                                               encoding='utf-8')
     # fix <br> tags since not handled well by default by bs4

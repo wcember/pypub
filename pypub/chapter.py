@@ -198,7 +198,7 @@ class Chapter(object):
         image_url_list = self._get_image_urls()
         for image_tag, image_url in image_url_list:
             _replace_image(image_url, image_tag, ebook_folder)
-        unformatted_html_unicode_string = unicode(self._content_tree.prettify(encoding='utf-8',
+        unformatted_html_unicode_string = unicode(self._content_tree.prettify(encoding='utf-8',  # FIXME remove or make a debug option (https://github.com/wcember/pypub/issues/18). From bs4 docs, prettify() is for debugging purposes only - https://www.crummy.com/software/BeautifulSoup/bs4/doc/#pretty-printing `Since it adds whitespace (in the form of newlines), prettify() changes the meaning of an HTML document and should not be used to reformat one. The goal of prettify() is to help you visually understand the structure of the documents you work with.`
                                                                               formatter=EntitySubstitution.substitute_html),
                                                   encoding='utf-8')
         unformatted_html_unicode_string = unformatted_html_unicode_string.replace('<br>', '<br/>')
