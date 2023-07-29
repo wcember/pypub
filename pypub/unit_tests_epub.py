@@ -92,15 +92,19 @@ class TestEpub(unittest.TestCase):
 
     def test_create_epub(self):
         epub_dir_ending = time.strftime("%m%d%Y%H%M%S")
+        # This test uses different directories? To what end?
         epub_directory = os.path.join(TEST_DIR, 'epub_output', 'epub files' + epub_dir_ending)
         os.makedirs(epub_directory)
+        #import pdb; pdb.set_trace()
         e = epub.Epub('Test Epub', epub_dir=epub_directory)
         for index, c in enumerate(self.chapter_list[:3]):
             output_name = os.path.join(TEST_DIR,
                     'epub_output', str(index) + '.xhtml')
             c.write(output_name)
             e.add_chapter(c)
-        e.create_epub('test_epub', epub_directory)
+        #e.create_epub('test_epub', epub_directory)  # 2nd param is supposed to be a filename NOT a pathname
+        e.create_epub('test_epub')  # 2nd param is supposed to be a filename NOT a pathname
+        # where is the actual test validation/canon check!?
 
 
 if __name__ == '__main__':

@@ -27,6 +27,17 @@ import chapter
 requests.packages.urllib3.disable_warnings()
 
 
+def safe_mkdir(newdir):
+    result_dir = os.path.abspath(newdir)
+    try:
+        os.makedirs(result_dir)
+    except OSError, info:
+        if info.errno == 17 and os.path.isdir(result_dir):
+            pass
+        else:
+            raise
+
+
 class _Mimetype(object):
 
     def __init__(self, parent_directory):
@@ -262,7 +273,8 @@ class Epub(object):
             if epub_name is None:
                 epub_name = self.title
             epub_name = ''.join([c for c in epub_name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
-            epub_name_with_path = os.path.join(output_directory, epub_name)
+            epub_name_with_path = os.path.abspath(os.path.join(output_directory, epub_name))
+            safe_mkdir(os.path.dirname(epub_name_with_path))
             try:
                 os.remove(os.path.join(epub_name_with_path, '.zip'))
             except OSError:
