@@ -5,6 +5,7 @@ import string
 import shutil
 import tempfile
 import time
+import uuid
 from zipfile import ZipFile, ZIP_DEFLATED
 
 import jinja2
@@ -89,7 +90,8 @@ class TocHtml(_EpubFile):
         super(TocHtml, self).__init__(template_file, **non_chapter_parameters)
 
     def add_chapters(self, chapter_list):
-        chapter_numbers = range(len(chapter_list))
+        chapter_numbers = ['ch%03d' % n for n in range(len(chapter_list))]  # need to be valid XML names, do not start with numeric - TODO central function for this
+
         link_list = [str(n) + '.xhtml' for n in chapter_numbers]
         try:
             for c in chapter_list:
@@ -118,8 +120,8 @@ class TocNcx(_EpubFile):
         super(TocNcx, self).__init__(template_file, **non_chapter_parameters)
 
     def add_chapters(self, chapter_list):
-        id_list = range(len(chapter_list))
-        play_order_list = [n + 1 for n in id_list]
+        id_list = ['ch%03d' % n for n in range(len(chapter_list))]  # need to be valid XML names, do not start with numeric - TODO central function for this
+        play_order_list = list(range(1, len(chapter_list) + 1))
         title_list = [c.title for c in chapter_list]
         link_list = [str(n) + '.xhtml' for n in id_list]
         super(TocNcx, self).add_chapters(**{'id': id_list,
@@ -137,7 +139,7 @@ class TocNcx(_EpubFile):
 
 class ContentOpf(_EpubFile):
 
-    def __init__(self, title, creator='', language='', rights='', publisher='', uid='', date=time.strftime("%m-%d-%Y")):
+    def __init__(self, title, creator='', language='', rights='', publisher='', uid='', date=time.strftime("%Y-%m-%d")):  # FIXME ISO date formated needed, include timestamp and TZ? For web server, check headers for last updated
         super(ContentOpf, self).__init__(os.path.join(EPUB_TEMPLATES_DIR, 'opf.xml'),
                                          title=title,
                                          creator=creator,
@@ -148,8 +150,8 @@ class ContentOpf(_EpubFile):
                                          date=date)
 
     def add_chapters(self, chapter_list):
-        id_list = range(len(chapter_list))
-        link_list = [str(n) + '.xhtml' for n in id_list]
+        id_list = ['ch%03d' % n for n in range(len(chapter_list))]  # need to be valid XML names, do not start with numeric - TODO central function for this
+        link_list = [str(n) + '.xhtml' for n in id_list]  # be consitent with new IDs which need to be valid XML names
         super(ContentOpf, self).add_chapters(**{'id': id_list, 'link': link_list})
 
     def get_content_as_element(self):
@@ -187,11 +189,11 @@ class Epub(object):
         self.language = language
         self.rights = rights
         self.publisher = publisher
-        self.uid = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
+        self.uid = 'urn:uuid:%s' % uuid.uuid4()  # TODO allow use to pass something in (e.g. ISBN)
         self.current_chapter_number = None
         self._increase_current_chapter_number()
         self.toc_html = TocHtml()
-        self.toc_ncx = TocNcx()
+        self.toc_ncx = TocNcx(uid=self.uid)
         self.opf = ContentOpf(self.title, self.creator, self.language, self.rights, self.publisher, self.uid)
         self.mimetype = _Mimetype(self.EPUB_DIR)
         self.container = _ContainerFile(self.META_INF_DIR)
@@ -214,7 +216,7 @@ class Epub(object):
             self.current_chapter_number = 0
         else:
             self.current_chapter_number += 1
-        self.current_chapter_id = str(self.current_chapter_number)
+        self.current_chapter_id = 'ch%03d' % self.current_chapter_number  # TODO central function for chapter id gen? ncx, opf, etc.
         self.current_chapter_path = ''.join([self.current_chapter_id, '.xhtml'])
 
     def add_chapter(self, c):
@@ -233,7 +235,7 @@ class Epub(object):
         except AssertionError:
             raise TypeError('chapter must be of type Chapter')
         chapter_file_output = os.path.join(self.OEBPS_DIR, self.current_chapter_path)
-        c._replace_images_in_chapter(self.OEBPS_DIR)
+        c._replace_images_in_chapter(self.OEBPS_DIR)  # FIXME if this is the correct place to do this, then title should also be injected too at this point (or at chapter creation time)
         c.write(chapter_file_output)
         self._increase_current_chapter_number()
         self.chapters.append(c)
@@ -269,6 +271,7 @@ class Epub(object):
             # TODO cleanup chdir code
             # TODO refactor/simplify walk code
             # TODO compression - debug Stored for now
+            # TODO change sort order, chapters AFTER opf, ncx, toc, etc.
             save_cwd = os.getcwd()
             os.chdir(self.EPUB_DIR)
             archname = epub_name_with_path + '.zip'

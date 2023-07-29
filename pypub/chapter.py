@@ -139,11 +139,15 @@ class Chapter(object):
     """
     def __init__(self, content, title, url=None):
         self._validate_input_types(content, title)
-        self.title = title
+        self.title = title # FIXME unused, apart from generating html_title is which also unused
         self.content = content
         self._content_tree = BeautifulSoup(self.content, 'html.parser')
         self.url = url
-        self.html_title = cgi.escape(self.title, quote=True)
+        self.html_title = cgi.escape(self.title, quote=True)  # FIXME unused
+        # TODO inject title into head of content. Options:
+        #   here at init
+        #   same time _replace_images_in_chapter() is called
+        # in create_chapter_from_ABC() functions - ideally create_chapter_from_string() as single place
 
     def write(self, file_name):
         """
@@ -153,7 +157,7 @@ class Chapter(object):
             file_name (str): The full name of the xhtml file to save to.
         """
         try:
-            assert file_name[-6:] == '.xhtml'
+            assert file_name[-6:] == '.xhtml'  # FIXME use .endswith()
         except (AssertionError, IndexError):
             raise ValueError('filename must end with .xhtml')
         with open(file_name, 'wb') as f:
@@ -288,8 +292,9 @@ class ChapterFactory(object):
             Chapter: A chapter object whose content is the given string
                 and whose title is that provided or inferred from the url
         """
-        clean_html_string = self.clean_function(html_string)
+        clean_html_string = self.clean_function(html_string, title=title)
         clean_xhtml_string = clean.html_to_xhtml(clean_html_string)
+        # TODO refactor/simplify below title logic (see clean())
         if title:
             pass
         else:

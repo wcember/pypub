@@ -34,7 +34,8 @@ def create_html_from_fragment(tag):
 
 
 def clean(input_string,
-          tag_dictionary=constants.SUPPORTED_TAGS):
+          tag_dictionary=constants.SUPPORTED_TAGS,
+          title=None):
     """
     Sanitizes HTML. Tags not contained as keys in the tag_dictionary input are
     removed, and child nodes are recursively moved to parent of removed node.
@@ -81,6 +82,14 @@ def clean(input_string,
     #wrap partial tree if necessary
     if root.find_all('html') == []:
         root = create_html_from_fragment(root)
+    # TODO ensure there is a head!
+    if root.html.head.title is None and title is None:  # leaves empty content alone
+        title = 'Ebook Chapter'  # FIXME same logic in Chapter()
+    if title:
+        # override
+        tmp_tag = root.new_tag('title')
+        tmp_tag.string = title
+        root.html.head.append(tmp_tag)
     # Remove img tags without src attribute
     image_node_list = root.find_all('img')
     for node in image_node_list:

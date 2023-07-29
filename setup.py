@@ -17,3 +17,5 @@ setup(
             ],
     description= "Create epub's using python. Pypub is a python library to create epub files quickly without having to worry about the intricacies of the epub specification.",
 )
+# TODO long description from readme
+# TODO py 2.7 and other classifiers
