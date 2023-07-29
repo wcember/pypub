@@ -14,9 +14,9 @@ class ChapterTests(unittest.TestCase):
         self.factory = chapter.ChapterFactory()
         self.test_image_list = []
 
-    def test_save_image(self):
+    def test_save_image(self):  # TODO do not hit external websites that may/will disappear. If want to test http(s) spin up a server as part of test
         image_url_list = ['http://www.fangraphs.com/images/247_90_fangraphs.png',  # available as of 2023-07-28
-                          'http://bothsides.wpengine.netdna-cdn.com/wp-content/uploads/2015/11/bothsides1.jpg']  # domain no longer available as of 2023-07-28 - expected to fail
+                          'https://web.archive.org/web/20190110010653if_/http://bothsides.wpengine.netdna-cdn.com/wp-content/uploads/2015/11/bothsides1.jpg']  # http://bothsides.wpengine.netdna-cdn.com/wp-content/uploads/2015/11/bothsides1.jpg']  # domain no longer available as of 2023-07-28
         image_type_list = ['.png',
                            '.jpg']
         for index, image in enumerate(image_url_list):
