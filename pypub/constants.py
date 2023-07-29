@@ -15,7 +15,7 @@ SUPPORTED_TAGS = {
     'div': ['align', 'id', 'bgcolor'],
     'em': ['id', 'title'],
     'font': ['color', 'face', 'id', 'size'],
-    'head': [],
+    'head': ['title'],  # this does not do anything, the top level title is what protects title in head
     'h1': [],
     'h2': [],
     'h3': [],
@@ -37,6 +37,7 @@ SUPPORTED_TAGS = {
     'strong': ['class', 'id'],
     'sub': ['id'],
     'sup': ['class', 'id'],
+    'title': [],  # for inside head tag
     'u': ['id'],
     'ul': ['class', 'id'],
     'var': []

@@ -61,8 +61,18 @@ def clean(input_string,
     except AssertionError:
         raise TypeError
     root = BeautifulSoup(input_string, 'html.parser')
+    # ensure there is a head!
+    #wrap partial tree if necessary
+    if root.find_all('html') == []:
+        root = create_html_from_fragment(root)
+    if title is None:
+        if root.html.head.title is None:  # leaves empty content alone
+            title = 'Ebook Chapter'  # FIXME same logic in Chapter()
+        else: # if root.html.head.title is not None
+            title = unicode(root.html.head.title.string)
     article_tag = root.find_all('article')
     if article_tag:
+        # throw away the rest, including existing headers
         root = article_tag[0]
     stack = root.findAll(True, recursive=False)
     while stack:
@@ -79,17 +89,17 @@ def clean(input_string,
                 if attribute not in tag_dictionary[current_node.name]:
                     attribute_dict.pop(attribute)
         stack.extend(child_node_list)
-    #wrap partial tree if necessary
+    #wrap partial tree if necessary - this maybe overkill
     if root.find_all('html') == []:
         root = create_html_from_fragment(root)
-    # TODO ensure there is a head!
-    if root.html.head.title is None and title is None:  # leaves empty content alone
-        title = 'Ebook Chapter'  # FIXME same logic in Chapter()
     if title:
         # override
-        tmp_tag = root.new_tag('title')
-        tmp_tag.string = title
-        root.html.head.append(tmp_tag)
+        if root.html.head.title is None:
+            tmp_tag = root.new_tag('title')
+            tmp_tag.string = title
+            root.html.head.append(tmp_tag)
+        else:
+            root.html.head.title.string = title
     # Remove img tags without src attribute
     image_node_list = root.find_all('img')
     for node in image_node_list:
