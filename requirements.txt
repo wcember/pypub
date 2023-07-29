@@ -1,4 +1,4 @@
-sphinxcontrib-napoleon
-beautifulsoup4
-requests
-jinja2
+MarkupSafe==1.1.1
+beautifulsoup4==4.9.3
+requests==2.22.0
+jinja2==2.11.3

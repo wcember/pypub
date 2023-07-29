@@ -40,9 +40,9 @@ class CleanTests(unittest.TestCase):
         self.assertEqual(condense(clean(s1)), condense(clean(s)))
 
     def test_clean_with_article(self):
-        s = '<html><head></head><body><article>Hello! I am a test</article></body></html>'
-        s1 = '<html><head></head><body><div>dsfasfadfasdfasdf</div><article>Hello! I am a test</article></body></html>'
-        s2 = '<html><head></head><body><article><video></video>Hello! I am a test</article></body></html>'
+        s = '<html><head><title>test title</title></head><body><article>Hello! I am a test</article></body></html>'
+        s1 = '<html><head><title>test title</title></head><body><div>dsfasfadfasdfasdf</div><article>Hello! I am a test</article></body></html>'
+        s2 = '<html><head><title>test title</title></head><body><article><video></video>Hello! I am a test</article></body></html>'
         self.assertEqual(condense(clean(s)), condense(s))
         self.assertEqual(condense(clean(s1)), condense(s))
         self.assertEqual(condense(clean(s2)), condense(s))
@@ -52,6 +52,7 @@ class CleanTests(unittest.TestCase):
                 <!DOCTYPE html>
                 <html>
                  <head>
+                    <title>test title</title>
                  </head>
                  <body>
                   <div>Hello </div>
@@ -62,6 +63,7 @@ class CleanTests(unittest.TestCase):
                 <!DOCTYPE html>
                 <html>
                  <head>
+                    <title>test title</title>
                  </head>
                  <body>
                   <div>Hello </div>
@@ -73,6 +75,7 @@ class CleanTests(unittest.TestCase):
                 <!DOCTYPE html>
                 <html>
                  <head>
+                    <title>test title</title>
                  </head>
                  <body>
                   <div>Hello </div>
@@ -84,6 +87,7 @@ class CleanTests(unittest.TestCase):
                 <!DOCTYPE html>
                 <html>
                  <head>
+                    <title>test title</title>
                  </head>
                  <body>
                   <div>Hello </div>
@@ -95,6 +99,7 @@ class CleanTests(unittest.TestCase):
                 <!DOCTYPE html>
                 <html>
                  <head>
+                    <title>test title</title>
                  </head>
                  <body>
                   <video>
@@ -109,6 +114,7 @@ class CleanTests(unittest.TestCase):
         <!DOCTYPE html>
         <html>
          <head>
+                    <title>test title</title>
          </head>
          <body>
           <video>
@@ -126,7 +132,24 @@ class CleanTests(unittest.TestCase):
         self.assertEqual(condense(clean(s5)), condense(s))
 
     def test_html_to_xhtml(self):
-        s = u'<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><div id="Test">Hello</div><br /><br /></body></html>'
+        s = u'<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>xhtml test title</title></head><body><div id="Test">Hello</div><br /><br /></body></html>'
+        s1 = u'''
+                <!DOCTYPE html>
+                <html>
+                 <head>
+                 <title>xhtml test title</title>
+                 </head>
+                 <body>
+                  <DIV ID="Test">Hello</div>
+                  <br>
+                  <br>
+                 </body>
+                </html>
+                '''
+        self.assertEqual(condense(html_to_xhtml(clean(s1))), s)
+
+    def test_html_to_xhtml_no_title(self):
+        s = u'<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Ebook Chapter</title></head><body><div id="Test">Hello</div><br /><br /></body></html>'
         s1 = u'''
                 <!DOCTYPE html>
                 <html>

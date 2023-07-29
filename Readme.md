@@ -1,6 +1,6 @@
 # Pypub #
 
-Create epub's using python. Pypub is a python library to create epub files quickly without having to worry about the intricacies of the epub specification.
+Create epub (version 2) files using python. Pypub is a python library to create epub files quickly without having to worry about the intricacies of the epub specification.
 
 # Installation #
 The current release of pypub is available through pip:
@@ -31,6 +31,16 @@ Pypub is currently only compatible with Python 2.
 # Documentation #
 
 Documentation is available at [http://pypub.readthedocs.org/en/latest/developer_interface.html](http://pypub.readthedocs.org/en/latest/developer_interface.html)
+
+# Dev Setup #
+
+To use code from a source code checkout from git
+
+    $ python -m pip install -r requirements.txt
+
+# Useful Resources #
+
+  * https://www.eboundcanada.org/resources/whats-in-an-epub-the-opf-file/
 
 # Copyright and License #
 
