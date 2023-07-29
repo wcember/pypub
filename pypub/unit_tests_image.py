@@ -15,10 +15,10 @@ class ChapterTests(unittest.TestCase):
         self.test_image_list = []
 
     def test_save_image(self):
-        image_url_list = ['http://www.fangraphs.com/images/247_90_fangraphs.png',
-                          'http://bothsides.wpengine.netdna-cdn.com/wp-content/uploads/2015/11/bothsides1.jpg']
-        image_type_list = ['png',
-                           'jpg']
+        image_url_list = ['http://www.fangraphs.com/images/247_90_fangraphs.png',  # available as of 2023-07-28
+                          'http://bothsides.wpengine.netdna-cdn.com/wp-content/uploads/2015/11/bothsides1.jpg']  # domain no longer available as of 2023-07-28 - expected to fail
+        image_type_list = ['.png',
+                           '.jpg']
         for index, image in enumerate(image_url_list):
             self.assertEqual(chapter.save_image(image_url_list[index], test_directory,
                                                 'test image ' + str(index)),
